@@ -15,7 +15,8 @@ import './styles/App.css';
 export class App extends Component {
   state = {
     isRegistered: false,
-    errors: [{ msg: '', param: '' }]
+    errors: [{ msg: '', param: '' }],
+    status: [{ msg: '' }]
   };
 
   handleLoginInput = (e) => {
@@ -46,7 +47,8 @@ export class App extends Component {
       name: '',
       password: '',
       confirmPassword: '',
-      errors: [{ msg: '', param: '' }]
+      errors: [{ msg: '', param: '' }],
+      status: [{ msg: '' }]
     });
   };
 
@@ -90,10 +92,16 @@ export class App extends Component {
       })
       .then((res) => {
         //If user exists, send error stating this and redirect to login
+        if (res.status === 201) {
+          this.setState({
+            isRegistered: true,
+            status: [{ msg: res.data.msg }]
+          });
+        }
         if (res.status === 200) {
           this.setState({
             isRegistered: true,
-            errors: [{ msg: res.data.error }]
+            status: [{ msg: res.data.msg }]
           });
         }
       })
@@ -132,6 +140,7 @@ export class App extends Component {
             {/* <Route path="/" exact component={Dashboard} /> */}
             <Route path="/login">
               <Login
+                statusMsg={this.state.status}
                 serverErrors={this.state.errors}
                 handleChange={this.handleLoginInput}
                 handleInput={this.handleLogin}

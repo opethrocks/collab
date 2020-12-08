@@ -17,6 +17,7 @@ router.post(
       min: 8
     })
   ],
+
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -27,19 +28,32 @@ router.post(
     }
 
     const { email, password } = req.body;
+
     try {
       let user = await User.findOne({
-        email
+        email: email
       });
-      if (!user)
+
+      if (!user) {
         return res.status(400).json({
-          message: 'User Not Exist'
+          errors: [
+            {
+              msg: 'User does not exist',
+              param: 'email'
+            }
+          ]
         });
+      }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch)
         return res.status(400).json({
-          message: 'Incorrect Password !'
+          errors: [
+            {
+              msg: 'Incorrect Password!',
+              param: 'password'
+            }
+          ]
         });
 
       const payload = {
@@ -64,7 +78,11 @@ router.post(
     } catch (e) {
       console.error(e);
       res.status(500).json({
-        message: 'Server Error'
+        errors: [
+          {
+            msg: 'Server Error'
+          }
+        ]
       });
     }
   }

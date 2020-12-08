@@ -48,8 +48,8 @@ router.post(
       User.findOne({ email: req.body.email }).then((user) => {
         if (user) {
           //User exists
-          errors.error = 'User already registered';
-          res.status(200).send(errors);
+
+          res.status(201).send({ msg: 'User already registered' });
         } else {
           const newUser = new User({
             name,

@@ -15,35 +15,60 @@ function Login(props) {
   return (
     <div className="page">
       <div className="box">
-        {props.serverErrors.find((err) => err.msg !== '') &&
-          props.serverErrors.map((err) => (
-            <div className="success-alert" key={err.msg}>
-              <strong>{err.msg}</strong>
+        {props.statusMsg.find((status) => status.msg !== '') &&
+          props.statusMsg.map((status) => (
+            <div className="success-alert" key={status.msg}>
+              <strong>{status.msg}</strong>
             </div>
           ))}
         <img src={img} alt="" />
         <label className="label">Email</label>
         <form className="box-flex">
           <input
-            className="input"
+            className={
+              props.serverErrors.find((err) => err.msg !== '') &&
+              props.serverErrors.filter((err) => err.param === 'email').length >
+                0
+                ? 'error'
+                : 'input'
+            }
             type="text"
             name="email"
             id="email"
             placeholder="Enter email"
             onChange={handleChange}
           />
+          {props.serverErrors.find((err) => err.param === 'email') && (
+            <p className="errorMsg">
+              {props.serverErrors.filter((err) => err.param === 'email')[0].msg}
+            </p>
+          )}
         </form>
         <label className="label">Password</label>
 
         <form className="box-flex">
           <input
-            className="input"
+            className={
+              props.serverErrors.find((err) => err.msg !== '') &&
+              props.serverErrors.filter((err) => err.param === 'password')
+                .length > 0
+                ? 'error'
+                : 'input'
+            }
             type="password"
             name="password"
             id="password"
             placeholder="Enter password"
             onChange={handleChange}
           />
+          {props.serverErrors.find((err) => err.param === 'password') && (
+            <p className="errorMsg">
+              {
+                props.serverErrors.filter((err) => err.param === 'password')[0]
+                  .msg
+              }
+            </p>
+          )}
         </form>
         <button onClick={handleLogin}>Login</button>
         <p>
