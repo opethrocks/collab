@@ -57,7 +57,7 @@ export class App extends Component {
     const password = this.state.password;
 
     axios
-      .post('http://localhost:3000/api/login', { email, password })
+      .post('http://localhost:5000/api/users/login', { email, password })
       .then((res) => {
         this.setState({
           token: res.data.token
@@ -84,20 +84,20 @@ export class App extends Component {
     const confirmPassword = this.state.confirmPassword;
 
     axios
-      .post('http://localhost:3000/api/register', {
+      .post('http://localhost:5000/api/users/register', {
         email,
         name,
         password,
         confirmPassword
       })
       .then((res) => {
-        //If user exists, send error stating this and redirect to login
-        if (res.status === 201) {
-          this.setState({
-            isRegistered: true,
-            status: [{ msg: res.data.msg }]
-          });
-        }
+        // //If user exists, send error stating this and redirect to login
+        // if (res.status === 201) {
+        //   this.setState({
+        //     isRegistered: true,
+        //     status: [{ msg: res.data.msg }]
+        //   });
+        // }
         if (res.status === 200) {
           this.setState({
             isRegistered: true,
