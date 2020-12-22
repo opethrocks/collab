@@ -14,6 +14,17 @@ function Login(props) {
     props.handleChange(e);
   };
 
+  //Display error messages in red under input boxes
+  const displayErrorMessage = (name) => {
+    if (props.serverErrors.find((err) => err.param === name)) {
+      return (
+        <p className="errorMsg">
+          {props.serverErrors.filter((err) => err.param === name)[0].msg}
+        </p>
+      );
+    }
+  };
+
   return (
     <div className="page">
       <div className="box">
@@ -43,12 +54,7 @@ function Login(props) {
             onChange={handleChange}
           />
           {/* If errors are present for this element, display red text denoting error message */}
-
-          {props.serverErrors.find((err) => err.param === 'email') && (
-            <p className="errorMsg">
-              {props.serverErrors.filter((err) => err.param === 'email')[0].msg}
-            </p>
-          )}
+          {displayErrorMessage('email')}
         </form>
         <label className="label">Password</label>
         <form className="box-flex">
@@ -68,15 +74,7 @@ function Login(props) {
             onChange={handleChange}
           />
           {/* If errors are present for this element, display red text denoting error message */}
-
-          {props.serverErrors.find((err) => err.param === 'password') && (
-            <p className="errorMsg">
-              {
-                props.serverErrors.filter((err) => err.param === 'password')[0]
-                  .msg
-              }
-            </p>
-          )}
+          {displayErrorMessage('password')}
         </form>
         <button onClick={handleLogin}>Login</button>
         {/* Link to register if new user */}

@@ -15,6 +15,17 @@ function Register(props) {
     props.handleInput();
   };
 
+  //Display error messages in red under input boxes
+  const displayErrorMessage = (name) => {
+    if (props.serverErrors.find((err) => err.param === name)) {
+      return (
+        <p className="errorMsg">
+          {props.serverErrors.filter((err) => err.param === name)[0].msg}
+        </p>
+      );
+    }
+  };
+
   return (
     <div className="page">
       <div className="box">
@@ -33,16 +44,11 @@ function Register(props) {
             type="text"
             name="email"
             id="input"
-            placeholder="What's your email address?"
+            placeholder="What's your email?"
             onChange={handleChange}
           />
           {/* If errors are present display error message in red */}
-
-          {props.serverErrors.find((err) => err.param === 'email') && (
-            <p className="errorMsg">
-              {props.serverErrors.filter((err) => err.param === 'email')[0].msg}
-            </p>
-          )}
+          {displayErrorMessage('email')}
         </form>
 
         <label className="label">Full Name</label>
@@ -64,11 +70,7 @@ function Register(props) {
             onChange={handleChange}
           />
           {/* If errors are present display error message in red */}
-          {props.serverErrors.find((err) => err.param === 'name') && (
-            <p className="errorMsg">
-              {props.serverErrors.filter((err) => err.param === 'name')[0].msg}
-            </p>
-          )}
+          {displayErrorMessage('name')}
         </form>
         <label className="label">Password</label>
 
@@ -85,18 +87,11 @@ function Register(props) {
             type="password"
             name="password"
             id="input"
-            placeholder="Enter a password with at least 8 characters"
+            placeholder="Enter a password"
             onChange={handleChange}
           />
           {/* If errors are present display error message in red */}
-          {props.serverErrors.find((err) => err.param === 'password') && (
-            <p className="errorMsg">
-              {
-                props.serverErrors.filter((err) => err.param === 'password')[0]
-                  .msg
-              }
-            </p>
-          )}
+          {displayErrorMessage('password')}
         </form>
         <label className="label">Confirm password</label>
 
@@ -118,18 +113,7 @@ function Register(props) {
             onChange={handleChange}
           />
           {/* If errors are present display error message in red */}
-
-          {props.serverErrors.find(
-            (err) => err.param === 'confirmPassword'
-          ) && (
-            <p className="errorMsg">
-              {
-                props.serverErrors.filter(
-                  (err) => err.param === 'confirmPassword'
-                )[0].msg
-              }
-            </p>
-          )}
+          {displayErrorMessage('confirmPassword')}
         </form>
         <button onClick={handleRegister}>Register</button>
         {/* Link to login if user already registered */}
