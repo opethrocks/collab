@@ -12,10 +12,12 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import './styles/App.css';
 
+axios.defaults.withCredentials = true;
+
 export class App extends Component {
   state = {
     isRegistered: false,
-    errors: [{ msg: '', param: '' }],
+    inputErrors: [{ msg: '', param: '' }],
     status: [{ msg: '' }]
   };
 
@@ -31,7 +33,7 @@ export class App extends Component {
       [e.target.name]: e.target.value,
       isErrors: false
     });
-    this.state.errors.map((err) => {
+    this.state.inputErrors.map((err) => {
       if (e.target.name === err.param) {
         this.setState({
           errors: [{ msg: '', param: '' }]
@@ -43,11 +45,11 @@ export class App extends Component {
   clearState = () => {
     this.setState({
       isRegistered: false,
-      email: '',
-      name: '',
-      password: '',
-      confirmPassword: '',
-      errors: [{ msg: '', param: '' }],
+      email: undefined,
+      name: undefined,
+      password: undefined,
+      confirmPassword: undefined,
+      inputErrors: [{ msg: '', param: '' }],
       status: [{ msg: '' }]
     });
   };
@@ -57,23 +59,17 @@ export class App extends Component {
     const password = this.state.password;
 
     axios
-      .post('http://localhost:5000/api/users/login', { email, password })
+      .post('http://localhost:5000/api/login', { email, password })
       .then((res) => {
         this.setState({
-          token: res.data.token
+          token: res.cookie.token
         });
       })
       .catch((error) => {
         //Iterate error response and retrieve error message
-        if (error) {
-          //Iterate response to extract message and parameter
-          const errMsg = error.response.data.errors.map((err) => {
-            return { msg: err.msg, param: err.param };
-          });
-          this.setState({
-            errors: errMsg
-          });
-        }
+        this.setState({
+          inputErrors: error.response.data.errors
+        });
       });
   };
 
@@ -84,39 +80,37 @@ export class App extends Component {
     const confirmPassword = this.state.confirmPassword;
 
     axios
-      .post('http://localhost:5000/api/users/register', {
+      .post('http://localhost:5000/api/register', {
         email,
         name,
         password,
         confirmPassword
       })
       .then((res) => {
-        // //If user exists, send error stating this and redirect to login
-        // if (res.status === 201) {
-        //   this.setState({
-        //     isRegistered: true,
-        //     status: [{ msg: res.data.msg }]
-        //   });
-        // }
         if (res.status === 200) {
           this.setState({
-            isRegistered: true,
-            status: [{ msg: res.data.msg }]
+            isRegistered: true
           });
         }
       })
       .catch((error) => {
         //Iterate error response and retrieve error message
-        if (error) {
-          //Iterate response to extract message and parameter
-          const errMsg = error.response.data.errors.map((err) => {
-            return { msg: err.msg, param: err.param };
-          });
+        if (error.response.status == 400) {
           this.setState({
-            errors: errMsg
+            inputErrors: error.response.data.errors
+          });
+        }
+        if (error.response.status == 403) {
+          this.setState({
+            isRegistered: true,
+            status: error.response.data.status
           });
         }
       });
+  };
+
+  handleLogout = () => {
+    axios.post('http://localhost:5000/api/users/logout');
   };
 
   render() {
@@ -129,7 +123,11 @@ export class App extends Component {
                 <Link to="/">Dashboard</Link>
               </li>
               <li>
-                <Link to="/login">Login</Link>
+                {this.state.token ? (
+                  <Link onClick={this.handleLogout}>Logout</Link>
+                ) : (
+                  <Link to="/login">Login</Link>
+                )}
               </li>
               <li>
                 <Link to="/register">Register</Link>
@@ -141,7 +139,7 @@ export class App extends Component {
             <Route path="/login">
               <Login
                 statusMsg={this.state.status}
-                serverErrors={this.state.errors}
+                serverErrors={this.state.inputErrors}
                 handleChange={this.handleLoginInput}
                 handleInput={this.handleLogin}
                 clearState={this.clearState}
@@ -149,7 +147,7 @@ export class App extends Component {
             </Route>
             <Route path="/register">
               <Register
-                serverErrors={this.state.errors}
+                serverErrors={this.state.inputErrors}
                 clearState={this.clearState}
                 handleChange={this.handleRegisterInput}
                 handleInput={this.handleRegister}

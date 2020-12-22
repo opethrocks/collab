@@ -13,8 +13,6 @@ function Register(props) {
     props.handleInput();
   };
 
-  const errMsg = '';
-
   return (
     <div className="page">
       <div className="box">
@@ -23,7 +21,7 @@ function Register(props) {
         <form className="box-flex">
           <input
             className={
-              props.serverErrors.find((err) => err.msg !== '') &&
+              props.serverErrors &&
               props.serverErrors.filter((err) => err.param === 'email').length >
                 0
                 ? 'error'
@@ -31,7 +29,7 @@ function Register(props) {
             }
             type="text"
             name="email"
-            id={props.isErrors ? 'error' : 'input'}
+            id="input"
             placeholder="What's your email address?"
             onChange={handleChange}
           />
@@ -47,7 +45,7 @@ function Register(props) {
         <form className="box-flex">
           <input
             className={
-              props.serverErrors.find((err) => err.msg !== '') &&
+              props.serverErrors &&
               props.serverErrors.filter((err) => err.param === 'name').length >
                 0
                 ? 'error'
@@ -55,7 +53,7 @@ function Register(props) {
             }
             type="text"
             name="name"
-            id={props.isErrors ? 'error' : 'input'}
+            id="input"
             placeholder="What's your name?"
             onChange={handleChange}
           />
@@ -70,7 +68,7 @@ function Register(props) {
         <form className="box-flex">
           <input
             className={
-              props.serverErrors.find((err) => err.msg !== '') &&
+              props.serverErrors &&
               props.serverErrors.filter((err) => err.param === 'password')
                 .length > 0
                 ? 'error'
@@ -78,7 +76,7 @@ function Register(props) {
             }
             type="password"
             name="password"
-            id={props.isErrors ? 'error' : 'input'}
+            id="input"
             placeholder="Enter a password with at least 8 characters"
             onChange={handleChange}
           />
@@ -96,23 +94,27 @@ function Register(props) {
         <form className="box-flex">
           <input
             className={
-              props.serverErrors.find((err) => err.msg !== '') &&
-              props.serverErrors.filter((err) => err.param === 'password')
-                .length > 0
+              props.serverErrors &&
+              props.serverErrors.filter(
+                (err) => err.param === 'confirmPassword'
+              ).length > 0
                 ? 'error'
                 : 'input'
             }
             type="password"
             name="confirmPassword"
-            id={props.isErrors ? 'error' : 'input'}
+            id="input"
             placeholder="Re-enter Password"
             onChange={handleChange}
           />
-          {props.serverErrors.find((err) => err.param === 'password') && (
+          {props.serverErrors.find(
+            (err) => err.param === 'confirmPassword'
+          ) && (
             <p className="errorMsg">
               {
-                props.serverErrors.filter((err) => err.param === 'password')[0]
-                  .msg
+                props.serverErrors.filter(
+                  (err) => err.param === 'confirmPassword'
+                )[0].msg
               }
             </p>
           )}

@@ -1,18 +1,18 @@
 const express = require('express');
-const session = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo')(session);
+
 require('dotenv').config();
 
 const app = express();
 
 //Body Parser
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: false }));
 
 //Cors
-app.use(cors());
+const corsOptions = { origin: 'http://localhost:3000', credentials: true };
+app.use(cors(corsOptions));
 
 //Port
 const port = process.env.PORT || 5000;
@@ -26,18 +26,8 @@ mongoose
   .then(() => console.log('MongoDB connected...'))
   .catch((err) => console.log(err));
 
-//Express session middleware to allow us to track user accross sessions
-app.use(
-  session({
-    secret: 'Joan Villalobos',
-    resave: true,
-    saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
-  })
-);
-
 //Configure routes
-const users = require('./api/routes/users');
-app.use('/api/users', users);
+
+app.use('/api', require('./routes'));
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
