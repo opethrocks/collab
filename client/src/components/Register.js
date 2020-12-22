@@ -5,10 +5,12 @@ import '../styles/Login.css';
 import img from '../assets/icon.png';
 
 function Register(props) {
+  //Keep inputs in sync with application state in App.js
   const handleChange = (e) => {
     props.handleChange(e);
   };
 
+  //Make post request to api
   const handleRegister = () => {
     props.handleInput();
   };
@@ -19,6 +21,7 @@ function Register(props) {
         <img src={img} alt="" />
         <label className="label">Email</label>
         <form className="box-flex">
+          {/* Apply error class if errors are present for this element */}
           <input
             className={
               props.serverErrors &&
@@ -33,6 +36,8 @@ function Register(props) {
             placeholder="What's your email address?"
             onChange={handleChange}
           />
+          {/* If errors are present display error message in red */}
+
           {props.serverErrors.find((err) => err.param === 'email') && (
             <p className="errorMsg">
               {props.serverErrors.filter((err) => err.param === 'email')[0].msg}
@@ -43,6 +48,7 @@ function Register(props) {
         <label className="label">Full Name</label>
 
         <form className="box-flex">
+          {/* Apply error class if errors are present for this element */}
           <input
             className={
               props.serverErrors &&
@@ -57,6 +63,7 @@ function Register(props) {
             placeholder="What's your name?"
             onChange={handleChange}
           />
+          {/* If errors are present display error message in red */}
           {props.serverErrors.find((err) => err.param === 'name') && (
             <p className="errorMsg">
               {props.serverErrors.filter((err) => err.param === 'name')[0].msg}
@@ -66,6 +73,7 @@ function Register(props) {
         <label className="label">Password</label>
 
         <form className="box-flex">
+          {/* Apply error class if errors are present for this element */}
           <input
             className={
               props.serverErrors &&
@@ -80,6 +88,7 @@ function Register(props) {
             placeholder="Enter a password with at least 8 characters"
             onChange={handleChange}
           />
+          {/* If errors are present display error message in red */}
           {props.serverErrors.find((err) => err.param === 'password') && (
             <p className="errorMsg">
               {
@@ -92,6 +101,7 @@ function Register(props) {
         <label className="label">Confirm password</label>
 
         <form className="box-flex">
+          {/* Apply errors class if errors are present for this element */}
           <input
             className={
               props.serverErrors &&
@@ -107,6 +117,8 @@ function Register(props) {
             placeholder="Re-enter Password"
             onChange={handleChange}
           />
+          {/* If errors are present display error message in red */}
+
           {props.serverErrors.find(
             (err) => err.param === 'confirmPassword'
           ) && (
@@ -120,6 +132,7 @@ function Register(props) {
           )}
         </form>
         <button onClick={handleRegister}>Register</button>
+        {/* Link to login if user already registered */}
         <p>
           Already registered?{' '}
           <Link to="/login" onClick={props.clearState}>

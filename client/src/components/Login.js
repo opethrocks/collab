@@ -4,10 +4,12 @@ import '../styles/Login.css';
 import img from '../assets/icon.png';
 
 function Login(props) {
+  //Handle login methods passed from App.js; login when clicked
   const handleLogin = () => {
     props.handleInput();
   };
 
+  //Keep input elements in sync with application state in App.js
   const handleChange = (e) => {
     props.handleChange(e);
   };
@@ -15,6 +17,7 @@ function Login(props) {
   return (
     <div className="page">
       <div className="box">
+        {/* If new status message flash notification box with message */}
         {props.statusMsg.find((status) => status.msg !== '') &&
           props.statusMsg.map((status) => (
             <div className="success-alert" key={status.msg}>
@@ -24,6 +27,7 @@ function Login(props) {
         <img src={img} alt="" />
         <label className="label">Email</label>
         <form className="box-flex">
+          {/* Apply error class to input if errors are present */}
           <input
             className={
               props.serverErrors.find((err) => err.msg !== '') &&
@@ -38,6 +42,8 @@ function Login(props) {
             placeholder="Enter email"
             onChange={handleChange}
           />
+          {/* If errors are present for this element, display red text denoting error message */}
+
           {props.serverErrors.find((err) => err.param === 'email') && (
             <p className="errorMsg">
               {props.serverErrors.filter((err) => err.param === 'email')[0].msg}
@@ -45,8 +51,8 @@ function Login(props) {
           )}
         </form>
         <label className="label">Password</label>
-
         <form className="box-flex">
+          {/* Apply error class to input if errors are present */}
           <input
             className={
               props.serverErrors.find((err) => err.msg !== '') &&
@@ -61,6 +67,8 @@ function Login(props) {
             placeholder="Enter password"
             onChange={handleChange}
           />
+          {/* If errors are present for this element, display red text denoting error message */}
+
           {props.serverErrors.find((err) => err.param === 'password') && (
             <p className="errorMsg">
               {
@@ -71,6 +79,7 @@ function Login(props) {
           )}
         </form>
         <button onClick={handleLogin}>Login</button>
+        {/* Link to register if new user */}
         <p>
           New user?{' '}
           <Link to="/register" onClick={props.clearState}>

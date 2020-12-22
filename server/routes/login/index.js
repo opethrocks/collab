@@ -14,6 +14,9 @@ const User = require('../../models/User');
 //Input validation
 const schema = require('../../models/Login');
 
+//Errors array
+const errors = [];
+
 router.post('/', inputValidator(schema), (req, res) => {
   const { email, password } = req.body;
 

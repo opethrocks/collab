@@ -21,6 +21,8 @@ export class App extends Component {
     status: [{ msg: '' }]
   };
 
+  //User input from login component
+
   handleLoginInput = (e) => {
     this.setState({
       ...this.state,
@@ -28,19 +30,16 @@ export class App extends Component {
     });
   };
 
+  //User input from register component
+
   handleRegisterInput = (e) => {
     this.setState({
-      [e.target.name]: e.target.value,
-      isErrors: false
-    });
-    this.state.inputErrors.map((err) => {
-      if (e.target.name === err.param) {
-        this.setState({
-          errors: [{ msg: '', param: '' }]
-        });
-      }
+      ...this.state,
+      [e.target.name]: e.target.value
     });
   };
+
+  //Remove user input when switching between login and register components
 
   clearState = () => {
     this.setState({
@@ -54,6 +53,8 @@ export class App extends Component {
     });
   };
 
+  //Create post request for login and add errors to state
+
   handleLogin = () => {
     const email = this.state.email;
     const password = this.state.password;
@@ -61,6 +62,7 @@ export class App extends Component {
     axios
       .post('http://localhost:5000/api/login', { email, password })
       .then((res) => {
+        //Set token from response
         this.setState({
           token: res.cookie.token
         });
@@ -72,6 +74,8 @@ export class App extends Component {
         });
       });
   };
+
+  //Create post request for register component
 
   handleRegister = () => {
     const email = this.state.email;
@@ -87,9 +91,11 @@ export class App extends Component {
         confirmPassword
       })
       .then((res) => {
+        //Upon successful registration
         if (res.status === 200) {
           this.setState({
-            isRegistered: true
+            isRegistered: true,
+            status: res.data.status
           });
         }
       })
@@ -100,6 +106,7 @@ export class App extends Component {
             inputErrors: error.response.data.errors
           });
         }
+        //If user is already registered
         if (error.response.status == 403) {
           this.setState({
             isRegistered: true,
@@ -117,11 +124,14 @@ export class App extends Component {
     return (
       <Router>
         <div className="App">
+          {/* Navigation bar */}
           <nav>
             <ul>
+              {/* Tab to Dashboard */}
               <li className="dashboard">
                 <Link to="/">Dashboard</Link>
               </li>
+              {/* Tab to Login/Logout depending on whether we have an auth token */}
               <li>
                 {this.state.token ? (
                   <Link onClick={this.handleLogout}>Logout</Link>
@@ -129,13 +139,15 @@ export class App extends Component {
                   <Link to="/login">Login</Link>
                 )}
               </li>
+              {/* Tab for register component */}
               <li>
                 <Link to="/register">Register</Link>
               </li>
             </ul>
           </nav>
           <Switch>
-            {/* <Route path="/" exact component={Dashboard} /> */}
+            <Route path="/" exact component={Dashboard} />
+            {/* Login route */}
             <Route path="/login">
               <Login
                 statusMsg={this.state.status}
@@ -145,6 +157,7 @@ export class App extends Component {
                 clearState={this.clearState}
               />
             </Route>
+            {/* Register route */}
             <Route path="/register">
               <Register
                 serverErrors={this.state.inputErrors}
@@ -153,11 +166,14 @@ export class App extends Component {
                 handleInput={this.handleRegister}
               />
             </Route>
+            {/* Dashboard route */}
             <Route path="/dashboard">
               <Dashboard />
             </Route>
           </Switch>
+          {/* Redirect to login if user is registered */}
           {this.state.isRegistered && <Redirect to="/login" />}
+          {/* Redirect to Dashboard if user is logged in */}
           {this.state.token && <Redirect to="/dashboard" />}
         </div>
       </Router>
