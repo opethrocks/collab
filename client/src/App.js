@@ -23,16 +23,7 @@ export class App extends Component {
 
   //User input from login component
 
-  handleLoginInput = (e) => {
-    this.setState({
-      ...this.state,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  //User input from register component
-
-  handleRegisterInput = (e) => {
+  handleInput = (e) => {
     this.setState({
       ...this.state,
       [e.target.name]: e.target.value
@@ -56,8 +47,7 @@ export class App extends Component {
   //Create post request for login and add errors to state
 
   handleLogin = () => {
-    const email = this.state.email;
-    const password = this.state.password;
+    const { email, password } = this.state;
 
     axios
       .post('http://localhost:5000/api/login', { email, password })
@@ -78,10 +68,7 @@ export class App extends Component {
   //Create post request for register component
 
   handleRegister = () => {
-    const email = this.state.email;
-    const name = this.state.name;
-    const password = this.state.password;
-    const confirmPassword = this.state.confirmPassword;
+    const { email, password, name, confirmPassword } = this.state;
 
     axios
       .post('http://localhost:5000/api/register', {
@@ -152,7 +139,7 @@ export class App extends Component {
               <Login
                 statusMsg={this.state.status}
                 serverErrors={this.state.inputErrors}
-                handleChange={this.handleLoginInput}
+                handleChange={this.handleInput}
                 handleInput={this.handleLogin}
                 clearState={this.clearState}
               />
@@ -162,7 +149,7 @@ export class App extends Component {
               <Register
                 serverErrors={this.state.inputErrors}
                 clearState={this.clearState}
-                handleChange={this.handleRegisterInput}
+                handleChange={this.handleInput}
                 handleInput={this.handleRegister}
               />
             </Route>
@@ -172,8 +159,11 @@ export class App extends Component {
             </Route>
           </Switch>
           {/* Redirect to login if user is registered */}
+
           {this.state.isRegistered && <Redirect to="/login" />}
+
           {/* Redirect to Dashboard if user is logged in */}
+
           {this.state.token && <Redirect to="/dashboard" />}
         </div>
       </Router>

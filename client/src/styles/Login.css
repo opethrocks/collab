@@ -18,7 +18,6 @@ label {
 
 input {
   padding: 8px;
-
   font-size: large;
   font-family: 'Montserrat', sans-serif;
   border: 2px solid rgb(155, 155, 155);
@@ -86,7 +85,7 @@ button {
 }
 
 .success-alert {
-  background-color: #75e4b9; /* orange */
+  background-color: #00ff55; /* green */
   color: white;
   margin-bottom: 5px;
   border-radius: 5px;
