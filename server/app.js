@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 
@@ -9,6 +10,9 @@ const app = express();
 //Body Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+//Cookie Parser
+app.use(cookieParser());
 
 //Cors
 const corsOptions = { origin: 'http://localhost:3000', credentials: true };

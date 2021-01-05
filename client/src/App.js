@@ -15,11 +15,15 @@ import './styles/App.css';
 axios.defaults.withCredentials = true;
 
 export class App extends Component {
-  state = {
-    isRegistered: false,
-    inputErrors: [{ msg: '', param: '' }],
-    status: [{ msg: '' }]
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isRegistered: false,
+      inputErrors: [{ msg: '', param: '' }],
+      status: '',
+      isAuthenticated: false
+    };
+  }
 
   //User input from login component
 
@@ -40,7 +44,7 @@ export class App extends Component {
       password: undefined,
       confirmPassword: undefined,
       inputErrors: [{ msg: '', param: '' }],
-      status: [{ msg: '' }]
+      status: ''
     });
   };
 
@@ -52,14 +56,20 @@ export class App extends Component {
     axios
       .post('http://localhost:5000/api/login', { email, password })
       .then((res) => {
-        //Set token from response
-        this.setState({
-          token: res.cookie.token
-        });
+        if (res.status === 200) {
+          this.clearState();
+          this.setState({
+            ...this.state,
+            user: res.data.name,
+            isAuthenticated: true
+          });
+        }
       })
       .catch((error) => {
         //Iterate error response and retrieve error message
+        console.log(error);
         this.setState({
+          ...this.state,
           inputErrors: error.response.data.errors
         });
       });
@@ -81,30 +91,36 @@ export class App extends Component {
         //Upon successful registration
         if (res.status === 200) {
           this.setState({
+            ...this.state,
             isRegistered: true,
-            status: res.data.status
+            status: res.data.msg
           });
         }
       })
       .catch((error) => {
         //Iterate error response and retrieve error message
-        if (error.response.status == 400) {
+        if (error.response.status === 400) {
           this.setState({
+            ...this.state,
             inputErrors: error.response.data.errors
           });
         }
         //If user is already registered
-        if (error.response.status == 403) {
+        if (error.response.status === 403) {
           this.setState({
+            ...this.state,
             isRegistered: true,
-            status: error.response.data.status
+            status: error.response.data.msg
           });
         }
       });
   };
 
   handleLogout = () => {
-    axios.post('http://localhost:5000/api/users/logout');
+    this.setState({
+      ...this.state,
+      isAuthenticated: false
+    });
   };
 
   render() {
@@ -115,13 +131,17 @@ export class App extends Component {
           <nav>
             <ul>
               {/* Tab to Dashboard */}
-              <li className="dashboard">
-                <Link to="/">Dashboard</Link>
-              </li>
+              {this.state.isAuthenticated && (
+                <li className="dashboard">
+                  <Link to="/">Dashboard</Link>
+                </li>
+              )}
               {/* Tab to Login/Logout depending on whether we have an auth token */}
               <li>
-                {this.state.token ? (
-                  <Link onClick={this.handleLogout}>Logout</Link>
+                {this.state.isAuthenticated ? (
+                  <Link to="/login" onClick={this.handleLogout}>
+                    Logout
+                  </Link>
                 ) : (
                   <Link to="/login">Login</Link>
                 )}
@@ -133,7 +153,7 @@ export class App extends Component {
             </ul>
           </nav>
           <Switch>
-            <Route path="/" exact component={Dashboard} />
+            <Route path="/" exact />
             {/* Login route */}
             <Route path="/login">
               <Login
@@ -162,9 +182,13 @@ export class App extends Component {
 
           {this.state.isRegistered && <Redirect to="/login" />}
 
+          {/* Redirect to login if user logs out */}
+
+          {!this.state.isAuthenticated && <Redirect to="/login" />}
+
           {/* Redirect to Dashboard if user is logged in */}
 
-          {this.state.token && <Redirect to="/dashboard" />}
+          {this.state.isAuthenticated && <Redirect to="/dashboard" />}
         </div>
       </Router>
     );

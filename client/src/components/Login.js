@@ -32,13 +32,10 @@ function Login(props) {
   //Display notification box when status changes
 
   const displayNotification = () => {
-    if (props.statusMsg.find((status) => status.msg !== '')) {
+    if (props.statusMsg) {
       return (
-        <div
-          className="success-alert"
-          key={props.statusMsg.find((status) => status.msg)}
-        >
-          <strong>{props.statusMsg.find((status) => status.msg)}</strong>
+        <div className="success-alert">
+          <strong>{props.statusMsg}</strong>
         </div>
       );
     }

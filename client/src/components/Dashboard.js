@@ -4,8 +4,8 @@ import axios from 'axios';
 function Dashboard() {
   const handleDashboard = () => {
     axios
-      .post('http://localhost:5000/api/users/dashboard')
-      .then((res) => console.log(res.cookie));
+      .get('http://localhost:5000/api/dashboard')
+      .then((res) => console.log(res));
   };
   return (
     <div>
