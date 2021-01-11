@@ -21,7 +21,7 @@ export class App extends Component {
       isRegistered: false,
       inputErrors: [{ msg: '', param: '' }],
       status: '',
-      isAuthenticated: false
+      token: undefined
     };
   }
 
@@ -60,8 +60,7 @@ export class App extends Component {
           this.clearState();
           this.setState({
             ...this.state,
-            user: res.data.name,
-            isAuthenticated: true
+            token: res.data.token
           });
         }
       })
@@ -119,7 +118,14 @@ export class App extends Component {
   handleLogout = () => {
     this.setState({
       ...this.state,
-      isAuthenticated: false
+      token: undefined
+    });
+  };
+
+  updateToken = (newToken) => {
+    this.setState({
+      ...this.state,
+      token: newToken
     });
   };
 
@@ -131,14 +137,14 @@ export class App extends Component {
           <nav>
             <ul>
               {/* Tab to Dashboard */}
-              {this.state.isAuthenticated && (
+              {this.state.token && (
                 <li className="dashboard">
                   <Link to="/">Dashboard</Link>
                 </li>
               )}
               {/* Tab to Login/Logout depending on whether we have an auth token */}
               <li>
-                {this.state.isAuthenticated ? (
+                {this.state.token ? (
                   <Link to="/login" onClick={this.handleLogout}>
                     Logout
                   </Link>
@@ -175,7 +181,10 @@ export class App extends Component {
             </Route>
             {/* Dashboard route */}
             <Route path="/dashboard">
-              <Dashboard />
+              <Dashboard
+                token={this.state.token}
+                updateToken={this.updateToken}
+              />
             </Route>
           </Switch>
           {/* Redirect to login if user is registered */}
@@ -184,11 +193,11 @@ export class App extends Component {
 
           {/* Redirect to login if user logs out */}
 
-          {!this.state.isAuthenticated && <Redirect to="/login" />}
+          {!this.state.token && <Redirect to="/login" />}
 
           {/* Redirect to Dashboard if user is logged in */}
 
-          {this.state.isAuthenticated && <Redirect to="/dashboard" />}
+          {this.state.token && <Redirect to="/dashboard" />}
         </div>
       </Router>
     );

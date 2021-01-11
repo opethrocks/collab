@@ -36,25 +36,16 @@ router.post('/', inputValidator(schema), async (req, res) => {
         errors: [{ msg: 'Password is incorrect', param: 'password' }]
       });
     } else {
-      // //Generate token
-      // const newToken = new Token({
-      //   expires_at: Date.now() + 60,
-      //   last_used_at: Date.now(),
-      //   user_id: user._id
-      // }).save();
-
       const accessToken = await token.generateAccessToken(user);
       const refreshToken = await token.generateRefreshToken(user);
 
-      // newToken.refresh_token = refreshToken;
+      res.cookie('token', refreshToken, {
+        secure: process.env == 'Production' ? true : false,
+        httpOnly: true,
+        sameSite: 'strict'
+      });
 
-      res.cookie('accessToken', accessToken, {
-        secure: process.env == 'Production' ? true : false
-      });
-      res.cookie('refreshToken', refreshToken, {
-        secure: process.env == 'Production' ? true : false
-      });
-      res.status(200).send();
+      res.status(200).send({ token: accessToken });
     }
   } catch (err) {
     console.log(err);

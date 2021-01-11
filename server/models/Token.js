@@ -23,16 +23,12 @@ const TokenSchema = new mongoose.Schema({
 //Generate access token
 
 TokenSchema.methods.generateAccessToken = function (user) {
-  const { accessKey, accessCsrf } = require('../config/signingKeys');
+  const { jwtAccessKey } = require('../config/keys');
   const payload = {
     sub: user._id,
-    name: user.name,
-    scope: 'user',
-    expiresIn: '1m',
-    csrf: accessCsrf
+    name: user.name
   };
-
-  const accessToken = jwt.sign(payload, accessKey);
+  const accessToken = jwt.sign(payload, jwtAccessKey, { expiresIn: 60 });
 
   return accessToken;
 };
@@ -40,14 +36,13 @@ TokenSchema.methods.generateAccessToken = function (user) {
 //Generate Refresh Token
 
 TokenSchema.methods.generateRefreshToken = function (user) {
-  const { refreshKey, refreshCsrf } = require('../config/signingKeys');
+  const { jwtRefreshKey } = require('../config/keys');
   const payload = {
-    sub: user._id,
-    csrf: refreshCsrf,
-    expiresIn: '1h'
+    sub: user._id
   };
-
-  const refreshToken = jwt.sign(payload, refreshKey);
+  const refreshToken = jwt.sign(payload, jwtRefreshKey, {
+    expiresIn: 60 * 60 * 24
+  });
 
   return refreshToken;
 };
