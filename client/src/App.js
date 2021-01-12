@@ -11,6 +11,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import './styles/App.css';
+import img from './assets/icon.png';
 
 axios.defaults.withCredentials = true;
 
@@ -21,7 +22,8 @@ export class App extends Component {
       isRegistered: false,
       inputErrors: [{ msg: '', param: '' }],
       status: '',
-      token: undefined
+      token: undefined,
+      name: undefined
     };
   }
 
@@ -60,7 +62,8 @@ export class App extends Component {
           this.clearState();
           this.setState({
             ...this.state,
-            token: res.data.token
+            token: res.data.token,
+            name: res.data.name
           });
         }
       })
@@ -136,12 +139,8 @@ export class App extends Component {
           {/* Navigation bar */}
           <nav>
             <ul>
-              {/* Tab to Dashboard */}
-              {this.state.token && (
-                <li className="dashboard">
-                  <Link to="/">Dashboard</Link>
-                </li>
-              )}
+              <img className="icon" src={img} alt="" />
+
               {/* Tab to Login/Logout depending on whether we have an auth token */}
               <li>
                 {this.state.token ? (
@@ -154,7 +153,7 @@ export class App extends Component {
               </li>
               {/* Tab for register component */}
               <li>
-                <Link to="/register">Register</Link>
+                {!this.state.token && <Link to="/register">Register</Link>}
               </li>
             </ul>
           </nav>
@@ -184,6 +183,7 @@ export class App extends Component {
               <Dashboard
                 token={this.state.token}
                 updateToken={this.updateToken}
+                name={this.state.name}
               />
             </Route>
           </Switch>

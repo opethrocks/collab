@@ -15,34 +15,37 @@ const token = new Token();
 //If invalid and refresh token is valid, generate new access token and send to client
 
 const tokenValidator = () => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     const accessToken = req.body.token;
     const refreshToken = req.cookies.token;
 
-    console.log(accessToken);
+    //Check access token for validity, if so send back in response.
+    //If expired, and refresh token is valid, generate new access token and send to client.
+    try {
+      const decodedAccessToken = await jwt.verify(accessToken, jwtAccessKey);
+      const user = await User.findOne({ _id: decodedAccessToken.sub });
 
-    jwt.verify(accessToken, jwtAccessKey, (err) => {
-      if (err) {
-        if (err.message === 'jwt expired') {
-          jwt.verify(refreshToken, jwtRefreshKey, (err, data) => {
-            if (!err) {
-              const user = User.findOne({ _id: data.sub });
-              const newAccessToken = token.generateAccessToken(user);
+      res.status(200).send({ token: accessToken, name: user.name });
+    } catch (err) {
+      if (err.message === 'jwt expired') {
+        try {
+          const decodedRefreshToken = await jwt.verify(
+            refreshToken,
+            jwtRefreshKey
+          );
+          const user = await User.findOne({ _id: decodedRefreshToken.sub });
+          const newAccessToken = token.generateAccessToken(user);
 
-              return res
-                .status(200)
-                .send({ token: newAccessToken, name: user.name });
-            } else {
-              console.log(err.message);
-            }
-          });
-        } else {
-          res.status(401).send('unauthenticated');
+          return res
+            .status(200)
+            .send({ token: newAccessToken, name: user.name });
+        } catch (err) {
+          res.status(403).send(err.message);
         }
       } else {
-        res.status(200).send({ token: accessToken });
+        res.status(401).send('unauthenticated');
       }
-    });
+    }
     next();
   };
 };
