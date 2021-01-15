@@ -3,7 +3,6 @@ import axios from 'axios';
 import '../styles/Menu.css';
 
 function Dashboard(props) {
-  const [name, setName] = useState(props.name);
   const [item, setItem] = useState('dashboard');
 
   const handleDashboard = () => {
@@ -11,7 +10,6 @@ function Dashboard(props) {
       .post('http://localhost:5000/api/dashboard', { token: props.token })
       .then((res) => {
         props.updateToken(res.data.token);
-        setName(res.data.name);
       });
   };
 
@@ -36,7 +34,7 @@ function Dashboard(props) {
           Messages
         </a>
       </div>
-      <h1>{`${name}'s dashboard`}</h1>
+      <h1>{`${props.username}'s dashboard`}</h1>
       <button onClick={handleDashboard}>Dashboard</button>
     </div>
   );

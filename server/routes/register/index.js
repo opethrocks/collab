@@ -27,22 +27,19 @@ router.post('/', inputValidator(schema), async (req, res) => {
         email,
         password
       });
-      bcrypt
-        .genSalt(10, (err, salt) => {
-          bcrypt
-            .hash(password, salt, (err, hash) => {
-              if (err) throw err;
-              //Set password to hash
-              newUser.password = hash;
-              //Save new user
-              newUser
-                .save()
-                .then(() => res.status(200).json({ msg: 'You can now login' }))
-                .catch((err) => res.status(400).json({ msg: err }));
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
+      bcrypt.genSalt(10, (err, salt) => {
+        if (err) throw err;
+        bcrypt.hash(password, salt, (err, hash) => {
+          if (err) throw err;
+          //Set password to hash
+          newUser.password = hash;
+          //Save new user
+          newUser
+            .save()
+            .then(() => res.status(200).json({ msg: 'You can now login' }))
+            .catch((err) => res.status(400).json({ msg: err }));
+        });
+      });
     }
   } catch (err) {
     console.log(err);

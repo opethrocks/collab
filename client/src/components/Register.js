@@ -1,30 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Login.css';
 import Input from './Input';
-
 import img from '../assets/icon.png';
+import axios from 'axios';
 
 function Register(props) {
-  //Keep inputs in sync with application state in App.js
+  const [email, setEmail] = useState(undefined);
+  const [name, setName] = useState(undefined);
+  const [password, setPassword] = useState(undefined);
+  const [confirmPassword, setConfirmPassword] = useState(undefined);
+  const [errors, setErrors] = useState([{ msg: '', param: '' }]);
+
+  //Keep input in sync with state
 
   const handleChange = (e) => {
-    props.handleChange(e);
+    switch (e.target.name) {
+      case 'email':
+        setEmail(e.target.value);
+        break;
+      case 'name':
+        setName(e.target.value);
+        break;
+      case 'password':
+        setPassword(e.target.value);
+        break;
+      case 'confirmPassword':
+        setConfirmPassword(e.target.value);
+        break;
+      default:
+        break;
+    }
   };
 
-  //Make post request to api; method passed as props from App.js
+  //Make post request to api/register
 
   const handleRegister = () => {
-    props.handleInput();
+    axios
+      .post('http://localhost:5000/api/register', {
+        email,
+        password,
+        confirmPassword,
+        name
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          props.register(res.data.msg);
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setErrors(err.response.data.errors);
+        }
+        if (err.response.status === 403) {
+          props.register(err.response.data.msg);
+        }
+      });
   };
 
   //Display error messages in red under input boxes
 
   const displayErrorMessage = (name) => {
-    if (props.serverErrors.find((err) => err.param === name)) {
+    if (errors.find((err) => err.param === name)) {
       return (
         <p className="errorMsg">
-          {props.serverErrors.filter((err) => err.param === name)[0].msg}
+          {errors.filter((err) => err.param === name)[0].msg}
         </p>
       );
     }
@@ -38,7 +78,7 @@ function Register(props) {
         <Input
           param="email"
           type="text"
-          serverErrors={props.serverErrors}
+          serverErrors={errors}
           handleChange={handleChange}
         />
 
@@ -48,7 +88,7 @@ function Register(props) {
         <Input
           param="name"
           type="text"
-          serverErrors={props.serverErrors}
+          serverErrors={errors}
           handleChange={handleChange}
         />
 
@@ -58,7 +98,7 @@ function Register(props) {
         <Input
           param="password"
           type="password"
-          serverErrors={props.serverErrors}
+          serverErrors={errors}
           handleChange={handleChange}
         />
 
@@ -68,7 +108,7 @@ function Register(props) {
         <Input
           param="confirmPassword"
           type="password"
-          serverErrors={props.serverErrors}
+          serverErrors={errors}
           handleChange={handleChange}
         />
 
@@ -79,10 +119,7 @@ function Register(props) {
 
         {/* Link to login if user already registered */}
         <p>
-          Already registered?{' '}
-          <Link to="/login" onClick={props.clearState}>
-            Login here
-          </Link>
+          Already registered? <Link to="/login">Login here</Link>
         </p>
       </div>
     </div>

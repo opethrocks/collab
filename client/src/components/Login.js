@@ -1,42 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Input from './Input';
 import '../styles/Login.css';
 import img from '../assets/icon.png';
+import axios from 'axios';
 
 function Login(props) {
-  //Handle login methods passed from App.js; login when clicked
+  const [email, setEmail] = useState(undefined);
+  const [password, setPassword] = useState(undefined);
+  const [errors, setErrors] = useState([{ msg: '', param: '' }]);
+
+  //Make login request to api/login
 
   const handleLogin = () => {
-    props.handleInput();
+    axios
+      .post('http://localhost:5000/api/login', { email, password })
+      .then((res) => {
+        if (res.status === 200) {
+          props.login(res.data.token, res.data.name);
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setErrors(err.response.data.errors);
+        }
+      });
   };
 
-  //Keep input elements in sync with application state in App.js
+  //Keep input in sync with state
 
-  const handleChange = (e) => {
-    props.handleChange(e);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
   //Display error messages in red under input boxes
 
   const displayErrorMessage = (name) => {
-    if (props.serverErrors.find((err) => err.param === name)) {
+    if (errors.find((err) => err.param === name)) {
       return (
         <p className="errorMsg">
-          {props.serverErrors.filter((err) => err.param === name)[0].msg}
+          {errors.filter((err) => err.param === name)[0].msg}
         </p>
-      );
-    }
-  };
-
-  //Display notification box when status changes
-
-  const displayNotification = () => {
-    if (props.statusMsg) {
-      return (
-        <div className="success-alert">
-          <strong>{props.statusMsg}</strong>
-        </div>
       );
     }
   };
@@ -44,15 +52,12 @@ function Login(props) {
   return (
     <div className="page">
       <div className="box">
-        {/* If new status message flash notification box with message */}
-        {displayNotification()}
-
         <img src={img} alt="" />
         <Input
           param="email"
           type="text"
-          serverErrors={props.serverErrors}
-          handleChange={handleChange}
+          serverErrors={errors}
+          handleChange={handleEmailChange}
         />
 
         {/* If errors are present for this element, display red text denoting error message */}
@@ -61,8 +66,8 @@ function Login(props) {
         <Input
           param="password"
           type="password"
-          serverErrors={props.serverErrors}
-          handleChange={handleChange}
+          serverErrors={errors}
+          handleChange={handlePasswordChange}
         />
 
         {/* If errors are present for this element, display red text denoting error message */}
@@ -72,10 +77,7 @@ function Login(props) {
 
         {/* Link to register if new user */}
         <p>
-          New user?{' '}
-          <Link to="/register" onClick={props.clearState}>
-            Register here
-          </Link>
+          New user? <Link to="/register">Register here</Link>
         </p>
       </div>
     </div>
