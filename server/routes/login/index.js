@@ -36,7 +36,7 @@ router.post('/', inputValidator(schema), async (req, res) => {
         errors: [{ msg: 'Password is incorrect', param: 'password' }]
       });
     } else {
-      const accessToken = token.generateAccessToken(user);
+      // const accessToken = token.generateAccessToken(user);
       const refreshToken = token.generateRefreshToken(user);
 
       res.cookie('token', refreshToken, {
@@ -45,7 +45,7 @@ router.post('/', inputValidator(schema), async (req, res) => {
         sameSite: 'strict'
       });
 
-      res.status(200).send({ token: accessToken, name: user.name });
+      res.status(200).send({ name: user.name });
     }
   } catch (err) {
     console.log(err);

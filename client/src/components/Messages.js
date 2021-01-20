@@ -1,15 +1,16 @@
 import React, { useContext, useEffect } from 'react';
-import axios from 'axios';
 import SideMenu from './SideMenu';
 import { UserContext } from '../context/userContext';
+import axios from 'axios';
 
-function Dashboard(props) {
+function Messages(props) {
   const [state, setState] = useContext(UserContext);
 
-  const menuItems = ['Notes', 'Documents', 'To-Do'];
+  const menuItems = ['Conversations', 'Group Messages', 'Favorites'];
+
   useEffect(() => {
     axios
-      .post('http://localhost:5000/api/dashboard', { token: props.token })
+      .post('http://localhost:5000/api/messages', { token: props.token })
       .catch((err) =>
         setState((state) => ({ ...state, authenticated: false }))
       );
@@ -18,9 +19,9 @@ function Dashboard(props) {
   return (
     <div>
       <SideMenu menuItem={menuItems} />
-      <h1>{`${state.name}'s dashboard`}</h1>
+      <h1>{`${state.name}'s Messages`}</h1>
     </div>
   );
 }
 
-export default Dashboard;
+export default Messages;

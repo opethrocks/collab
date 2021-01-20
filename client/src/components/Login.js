@@ -1,51 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Input from './Input';
 import '../styles/Login.css';
 import img from '../assets/icon.png';
-import axios from 'axios';
+import useLogin from '../hooks/useLogin';
+import { UserContext } from '../context/userContext';
 
-function Login(props) {
-  const [email, setEmail] = useState(undefined);
-  const [password, setPassword] = useState(undefined);
-  const [errors, setErrors] = useState([{ msg: '', param: '' }]);
+function Login() {
+  const [state, setState] = useContext(UserContext);
 
-  //Make login request to api/login
-
-  const handleLogin = () => {
-    axios
-      .post('http://localhost:5000/api/login', { email, password })
-      .then((res) => {
-        if (res.status === 200) {
-          props.login(res.data.token, res.data.name);
-        }
-      })
-      .catch((err) => {
-        if (err.response.status === 400) {
-          setErrors(err.response.data.errors);
-        }
-      });
-  };
+  const { handleLogin } = useLogin();
 
   //Keep input in sync with state
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handleChange = (e) => {
+    if (e.target.name === 'email') {
+      setState((state) => ({ ...state, email: e.target.value }));
+    }
+    setState((state) => ({ ...state, password: e.target.value }));
   };
 
   //Display error messages in red under input boxes
 
   const displayErrorMessage = (name) => {
-    if (errors.find((err) => err.param === name)) {
-      return (
-        <p className="errorMsg">
-          {errors.filter((err) => err.param === name)[0].msg}
-        </p>
-      );
+    if (state.errors) {
+      if (state.errors.find((err) => err.param === name)) {
+        return (
+          <p className="errorMsg">
+            {state.errors.filter((err) => err.param === name)[0].msg}
+          </p>
+        );
+      }
     }
   };
 
@@ -56,8 +41,8 @@ function Login(props) {
         <Input
           param="email"
           type="text"
-          serverErrors={errors}
-          handleChange={handleEmailChange}
+          serverErrors={state.errors}
+          handleChange={handleChange}
         />
 
         {/* If errors are present for this element, display red text denoting error message */}
@@ -66,8 +51,8 @@ function Login(props) {
         <Input
           param="password"
           type="password"
-          serverErrors={errors}
-          handleChange={handlePasswordChange}
+          serverErrors={state.errors}
+          handleChange={handleChange}
         />
 
         {/* If errors are present for this element, display red text denoting error message */}

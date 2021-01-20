@@ -5,11 +5,13 @@ function Input(props) {
   //Apply error class to inputs if errors are present
 
   const applyErrorClass = (name) => {
-    if (props.serverErrors.find((err) => err.msg !== '')) {
-      if (props.serverErrors.filter((err) => err.param === name).length > 0) {
-        return 'error';
+    if (props.serverErrors) {
+      if (props.serverErrors.find((err) => err.msg !== '')) {
+        if (props.serverErrors.filter((err) => err.param === name).length > 0) {
+          return 'error';
+        }
+        return 'input';
       }
-      return 'input';
     }
   };
 

@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Login.css';
 import Input from './Input';
 import img from '../assets/icon.png';
 import axios from 'axios';
+import { UserContext } from '../context/userContext';
 
-function Register(props) {
-  const [email, setEmail] = useState(undefined);
-  const [name, setName] = useState(undefined);
-  const [password, setPassword] = useState(undefined);
-  const [confirmPassword, setConfirmPassword] = useState(undefined);
+function Register() {
   const [errors, setErrors] = useState([{ msg: '', param: '' }]);
+
+  const [state, setState] = useContext(UserContext);
 
   //Keep input in sync with state
 
   const handleChange = (e) => {
     switch (e.target.name) {
       case 'email':
-        setEmail(e.target.value);
+        // setEmail(e.target.value);
+        setState((state) => ({ ...state, email: e.target.value }));
         break;
       case 'name':
-        setName(e.target.value);
+        setState((state) => ({ ...state, name: e.target.value }));
         break;
       case 'password':
-        setPassword(e.target.value);
+        setState((state) => ({ ...state, password: e.target.value }));
         break;
       case 'confirmPassword':
-        setConfirmPassword(e.target.value);
+        setState((state) => ({ ...state, confirmPassword: e.target.value }));
         break;
       default:
         break;
@@ -38,22 +38,28 @@ function Register(props) {
   const handleRegister = () => {
     axios
       .post('http://localhost:5000/api/register', {
-        email,
-        password,
-        confirmPassword,
-        name
+        email: state.email,
+        password: state.password,
+        confirmPassword: state.confirmPassword,
+        name: state.name
       })
-      .then((res) => {
-        if (res.status === 200) {
-          props.register(res.data.msg);
-        }
-      })
+      .then((res) =>
+        setState((state) => ({
+          ...state,
+          registered: true,
+          status: res.data.msg
+        }))
+      )
       .catch((err) => {
         if (err.response.status === 400) {
           setErrors(err.response.data.errors);
         }
         if (err.response.status === 403) {
-          props.register(err.response.data.msg);
+          setState((state) => ({
+            ...state,
+            registered: true,
+            status: err.response.data.msg
+          }));
         }
       });
   };

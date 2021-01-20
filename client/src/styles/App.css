@@ -49,8 +49,12 @@ ul {
   box-shadow: 0 0 10px#75e4b9;
 }
 
-li {
+.right-item {
   float: right;
+}
+
+.left-item {
+  float: left;
 }
 
 li a {

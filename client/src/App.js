@@ -1,112 +1,74 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Switch,
   Redirect
 } from 'react-router-dom';
+import NavMenu from './components/NavMenu';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
+import Messages from './components/Messages';
 import './styles/App.css';
-import img from './assets/icon.png';
+import { UserContext } from './context/userContext';
 
 axios.defaults.withCredentials = true;
 
 function App() {
-  const [token, setToken] = useState(undefined);
-  const [name, setName] = useState(undefined);
-  const [registered, setRegistered] = useState(false);
-  const [status, setStatus] = useState(undefined);
-  // //Display notification box when status changes
+  const [state] = useContext(UserContext);
+
+  //Display notification box when status changes
 
   const displayNotification = () => {
-    if (status) {
+    if (state.status) {
       return (
         <div className="success-alert">
-          <strong>{status}</strong>
+          <strong>{state.status}</strong>
         </div>
       );
     }
   };
 
-  //Set token and username based on response from api
-
-  const handleLogin = (token, name) => {
-    setToken(token);
-    setName(name);
-  };
-
-  //Set registered to true and add status message from api/register
-
-  const handleRegister = (status) => {
-    setRegistered(true);
-    setStatus(status);
-  };
-
-  //Set token from response from login api
-
-  const updateToken = (token) => {
-    setToken(token);
-  };
-
   return (
     <Router>
       <div className="App">
-        {/* Navigation bar */}
-        <nav>
-          <ul>
-            <img className="icon" src={img} alt="" />
+        <NavMenu />
 
-            {/* Tab to Login/Logout depending on whether we have an auth token */}
-            <li>
-              {token ? (
-                <Link to="/login" onClick={() => setToken(undefined)}>
-                  Logout
-                </Link>
-              ) : (
-                <Link to="/login">Login</Link>
-              )}
-            </li>
-            {/* Tab for register component */}
-            <li>{!token && <Link to="/register">Register</Link>}</li>
-          </ul>
-        </nav>
         {/* If new status message flash notification box with message */}
         {displayNotification()}
 
         <Switch>
           <Route path="/" exact />
           {/* Login route */}
+
           <Route path="/login">
-            <Login login={handleLogin} />
+            <Login />
           </Route>
+
           {/* Register route */}
           <Route path="/register">
-            <Register register={handleRegister} />
+            <Register />
           </Route>
           {/* Dashboard route */}
           <Route path="/dashboard">
-            <Dashboard
-              username={name}
-              updateToken={updateToken}
-              token={token}
-            />
+            <Dashboard />
+          </Route>
+          <Route path="/messages">
+            <Messages />
           </Route>
         </Switch>
         {/* Redirect to login if user is registered */}
 
-        {registered && <Redirect to="/login" />}
+        {state.registered && <Redirect to="/login" />}
 
         {/* Redirect to login if user logs out */}
 
-        {!token && <Redirect to="/login" />}
+        {!state.authenticated && <Redirect to="/login" />}
 
         {/* Redirect to Dashboard if user is logged in */}
-
-        {token && <Redirect to="/dashboard" />}
+        {state.authenticated && <Redirect to="/dashboard" />}
       </div>
     </Router>
   );
