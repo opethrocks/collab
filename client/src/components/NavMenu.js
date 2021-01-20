@@ -7,6 +7,7 @@ import { UserContext } from '../context/userContext';
 function NavMenu() {
   const [state] = useContext(UserContext);
 
+  //Logout function from useLogin hook
   const { handleLogout } = useLogin();
 
   return (
@@ -25,7 +26,7 @@ function NavMenu() {
           {/* Tab to Login/Logout depending on whether we have successfull login*/}
           <li className="right-item">
             {state.authenticated ? (
-              <Link to="/login" onClick={() => handleLogout()}>
+              <Link to="/login" onClick={handleLogout}>
                 Logout
               </Link>
             ) : (

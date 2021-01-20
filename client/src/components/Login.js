@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Input from './Input';
 import '../styles/Login.css';
@@ -9,10 +9,11 @@ import { UserContext } from '../context/userContext';
 function Login() {
   const [state, setState] = useContext(UserContext);
 
-  const { handleLogin } = useLogin();
+  const { handleLogin, handleLogout } = useLogin();
 
-  //Keep input in sync with state
+  if (state.authenticated === false) handleLogout();
 
+  //Keep input in sync with state in UserContext
   const handleChange = (e) => {
     if (e.target.name === 'email') {
       setState((state) => ({ ...state, email: e.target.value }));
@@ -21,7 +22,6 @@ function Login() {
   };
 
   //Display error messages in red under input boxes
-
   const displayErrorMessage = (name) => {
     if (state.errors) {
       if (state.errors.find((err) => err.param === name)) {
@@ -62,7 +62,20 @@ function Login() {
 
         {/* Link to register if new user */}
         <p>
-          New user? <Link to="/register">Register here</Link>
+          New user?{' '}
+          <Link
+            to="/register"
+            //Reset state errors and status on redirect to register
+            onClick={() =>
+              setState((state) => ({
+                ...state,
+                status: undefined,
+                errors: undefined
+              }))
+            }
+          >
+            Register here
+          </Link>
         </p>
       </div>
     </div>

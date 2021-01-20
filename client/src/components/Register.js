@@ -1,18 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Login.css';
 import Input from './Input';
 import img from '../assets/icon.png';
-import axios from 'axios';
+import useRegister from '../hooks/useRegister';
 import { UserContext } from '../context/userContext';
 
 function Register() {
-  const [errors, setErrors] = useState([{ msg: '', param: '' }]);
-
   const [state, setState] = useContext(UserContext);
 
-  //Keep input in sync with state
+  //Register function to make api call to server
+  const { handleRegister } = useRegister();
 
+  //Keep input in sync with UserContext state
   const handleChange = (e) => {
     switch (e.target.name) {
       case 'email':
@@ -33,44 +33,12 @@ function Register() {
     }
   };
 
-  //Make post request to api/register
-
-  const handleRegister = () => {
-    axios
-      .post('http://localhost:5000/api/register', {
-        email: state.email,
-        password: state.password,
-        confirmPassword: state.confirmPassword,
-        name: state.name
-      })
-      .then((res) =>
-        setState((state) => ({
-          ...state,
-          registered: true,
-          status: res.data.msg
-        }))
-      )
-      .catch((err) => {
-        if (err.response.status === 400) {
-          setErrors(err.response.data.errors);
-        }
-        if (err.response.status === 403) {
-          setState((state) => ({
-            ...state,
-            registered: true,
-            status: err.response.data.msg
-          }));
-        }
-      });
-  };
-
   //Display error messages in red under input boxes
-
   const displayErrorMessage = (name) => {
-    if (errors.find((err) => err.param === name)) {
+    if (state.errors && state.errors.find((err) => err.param === name)) {
       return (
         <p className="errorMsg">
-          {errors.filter((err) => err.param === name)[0].msg}
+          {state.errors.filter((err) => err.param === name)[0].msg}
         </p>
       );
     }
@@ -84,7 +52,7 @@ function Register() {
         <Input
           param="email"
           type="text"
-          serverErrors={errors}
+          serverErrors={state.errors}
           handleChange={handleChange}
         />
 
@@ -94,7 +62,7 @@ function Register() {
         <Input
           param="name"
           type="text"
-          serverErrors={errors}
+          serverErrors={state.errors}
           handleChange={handleChange}
         />
 
@@ -104,7 +72,7 @@ function Register() {
         <Input
           param="password"
           type="password"
-          serverErrors={errors}
+          serverErrors={state.errors}
           handleChange={handleChange}
         />
 
@@ -114,7 +82,7 @@ function Register() {
         <Input
           param="confirmPassword"
           type="password"
-          serverErrors={errors}
+          serverErrors={state.errors}
           handleChange={handleChange}
         />
 

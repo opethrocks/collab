@@ -72,49 +72,6 @@ button {
   cursor: pointer;
 }
 
-/* The alert message box */
-.alert {
-  background-color: #f7ca00; /* orange */
-  color: white;
-  margin-bottom: 5px;
-  border-radius: 5px;
-  font-size: 20px;
-  padding: 10px;
-  -webkit-animation: fadeinout 6s linear forwards;
-  animation: fadeinout 6s linear forwards;
-}
-
-.success-alert {
-  background-color: #00ff55; /* green */
-  color: white;
-  margin-bottom: 5px;
-  border-radius: 5px;
-  font-size: 20px;
-  padding: 10px;
-  -webkit-animation: fadeinout 6s linear forwards;
-  animation: fadeinout 6s linear forwards;
-}
-
-@-webkit-keyframes fadeinout {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 2;
-  }
-}
-
-@keyframes fadeinout {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 2;
-  }
-}
-
 img {
   width: 120px;
   height: auto;

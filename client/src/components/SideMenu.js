@@ -4,10 +4,11 @@ import '../styles/Menu.css';
 function SideMenu(props) {
   const [activeItem, setActiveItem] = useState();
   const displayMenuItem = () => {
+    //Iterate menu items passed in from parent component
     return props.menuItem.map((item) => {
       return (
         <a
-          id={item}
+          key={item}
           onClick={() => setActiveItem(item)}
           className={activeItem === item ? 'active' : ''}
           href={`#${item}`}

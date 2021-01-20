@@ -3,26 +3,24 @@ import '../styles/Login.css';
 
 function Input(props) {
   //Apply error class to inputs if errors are present
-
   const applyErrorClass = (name) => {
-    if (props.serverErrors) {
-      if (props.serverErrors.find((err) => err.msg !== '')) {
-        if (props.serverErrors.filter((err) => err.param === name).length > 0) {
-          return 'error';
-        }
-        return 'input';
+    if (
+      props.serverErrors &&
+      props.serverErrors.find((err) => err.msg !== '')
+    ) {
+      if (props.serverErrors.filter((err) => err.param === name).length > 0) {
+        return 'error';
       }
+      return 'input';
     }
   };
 
-  //Keep input in sync with application state; this method is passed as props from Register.js
-
+  //Keep input in sync with state in UserContext
   const handleChange = (e) => {
     props.handleChange(e);
   };
 
   //Format label for inputs based on value passed in
-
   const createLabel = (param) => {
     if (param !== 'confirmPassword') {
       return param
@@ -35,7 +33,6 @@ function Input(props) {
   };
 
   //Create placeholder for inputs based on value passed in
-
   const createPlaceholder = (param) => {
     if (param === 'confirmPassword') {
       return 'Re-enter your password';

@@ -1,0 +1,27 @@
+/* The alert message box */
+.alert {
+  background-color: #f7e700; /* orange */
+  color: white;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 15px;
+  -webkit-animation: fadeinout 6s linear forwards;
+  animation: fadeinout 6s linear forwards;
+}
+
+.success-alert {
+  background-color: #09ff00; /* green */
+  color: white;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 15px;
+}
+
+.alert-box {
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+  width: auto;
+}
