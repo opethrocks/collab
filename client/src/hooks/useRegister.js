@@ -29,7 +29,7 @@ const useRegister = () => {
         //Reset error messages in order to show error notification
         //for 5 seconds
         setTimeout(() => {
-          setState((state) => ({ errors: undefined }));
+          setState((state) => ({ ...state, status: undefined }));
         }, 5000);
       })
       //If any errors we set as status message notification
@@ -53,7 +53,7 @@ const useRegister = () => {
         //Reset error messages in order to show error notification
         //for 5 seconds
         setTimeout(() => {
-          setState((state) => ({ errors: undefined }));
+          setState((state) => ({ ...state, status: undefined }));
         }, 5000);
       });
   };

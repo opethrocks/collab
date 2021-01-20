@@ -23,14 +23,12 @@ function Login() {
 
   //Display error messages in red under input boxes
   const displayErrorMessage = (name) => {
-    if (state.errors) {
-      if (state.errors.find((err) => err.param === name)) {
-        return (
-          <p className="errorMsg">
-            {state.errors.filter((err) => err.param === name)[0].msg}
-          </p>
-        );
-      }
+    if (state.errors && state.errors.find((err) => err.param === name)) {
+      return (
+        <p className="errorMsg">
+          {state.errors.filter((err) => err.param === name)[0].msg}
+        </p>
+      );
     }
   };
 
@@ -66,13 +64,7 @@ function Login() {
           <Link
             to="/register"
             //Reset state errors and status on redirect to register
-            onClick={() =>
-              setState((state) => ({
-                ...state,
-                status: undefined,
-                errors: undefined
-              }))
-            }
+            onClick={() => setState((state) => ({}))}
           >
             Register here
           </Link>

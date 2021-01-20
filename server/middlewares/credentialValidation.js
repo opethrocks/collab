@@ -1,6 +1,6 @@
 //Middleware for validating user input
 
-const userValidator = (schema, property) => {
+const userValidator = (schema) => {
   return (req, res, next) => {
     //Configure Joi options
     const options = { abortEarly: false, escapeHtml: true };
@@ -18,13 +18,10 @@ const userValidator = (schema, property) => {
           param
         };
       });
-      errors.push({ msg: '', param: '' });
-
       //Send error response
       res.status(400).json({ errors: errors });
     } else {
       //If no errors assign values to req.body and run next middleware
-
       req.body = value;
       next();
     }

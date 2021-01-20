@@ -33,9 +33,12 @@ const useLogin = () => {
   //the token from response object and unauthenticate the user.
   //We then redirect to the login page.
   function handleLogout() {
-    axios.get('http://localhost:5000/api/logout').then((res) => {
-      setState((state) => ({}));
-    });
+    axios
+      .get('http://localhost:5000/api/logout')
+      .then((res) => {
+        setState((state) => ({}));
+      })
+      .catch((err) => console.log(err.message));
   }
 
   return { handleLogin, handleLogout };

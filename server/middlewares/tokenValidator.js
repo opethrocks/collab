@@ -8,7 +8,6 @@ const { jwtRefreshKey } = require('../config/keys');
 const User = require('../models/User');
 
 //If access token is valid, send it back in response.
-//If invalid and refresh token is valid, generate new access token and send to client
 
 const tokenValidator = () => {
   return async (req, res, next) => {
@@ -20,6 +19,8 @@ const tokenValidator = () => {
 
       return res.status(200).send({ name: user.name });
     } catch (err) {
+      //If token is invalid remove token from response and send error response
+      res.clearCookie('token');
       res.status(401).send({ msg: 'You are unauthenticated' });
     }
 

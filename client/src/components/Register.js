@@ -16,7 +16,6 @@ function Register() {
   const handleChange = (e) => {
     switch (e.target.name) {
       case 'email':
-        // setEmail(e.target.value);
         setState((state) => ({ ...state, email: e.target.value }));
         break;
       case 'name':
@@ -93,7 +92,10 @@ function Register() {
 
         {/* Link to login if user already registered */}
         <p>
-          Already registered? <Link to="/login">Login here</Link>
+          Already registered?{' '}
+          <Link to="/login" onClick={() => setState((state) => ({}))}>
+            Login here
+          </Link>
         </p>
       </div>
     </div>
