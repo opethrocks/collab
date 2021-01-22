@@ -56,7 +56,9 @@ function Login() {
         {/* If errors are present for this element, display red text denoting error message */}
         {displayErrorMessage('password')}
 
-        <button onClick={handleLogin}>Login</button>
+        <button className="login-button" onClick={handleLogin}>
+          Login
+        </button>
 
         {/* Link to register if new user */}
         <p>

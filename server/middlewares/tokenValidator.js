@@ -17,7 +17,7 @@ const tokenValidator = () => {
       const decodedToken = await jwt.verify(token, jwtRefreshKey);
       const user = await User.findOne({ _id: decodedToken.sub });
 
-      return res.status(200).send({ name: user.name });
+      return res.status(200).send({ username: user.username });
     } catch (err) {
       //If token is invalid remove token from response and send error response
       res.clearCookie('token');

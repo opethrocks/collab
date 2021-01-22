@@ -59,7 +59,7 @@ input:focus {
   text-transform: uppercase;
 }
 
-button {
+.login-button {
   padding: 8px;
   width: 200px;
   background-color: #75e4b9;

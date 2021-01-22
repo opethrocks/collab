@@ -15,13 +15,13 @@ const inputSchema = Joi.object({
       'string.email': 'Please enter a valid email'
     }),
   //Name must only contain letters
-  name: Joi.string()
+  username: Joi.string()
     .required()
-    .pattern(new RegExp('[a-zA-Z]'))
+    .pattern(new RegExp('[a-zA-Z0-9]'))
     //Custom error messages
     .messages({
-      'any.required': 'Name is required',
-      'string.pattern.base': 'Name must contain only letters'
+      'any.required': 'Username is required'
+      // 'string.pattern.base': 'Name must contain only letters'
     }),
   //Password must have at least 8 but no more than 30 chars, no special chars
   password: Joi.string()

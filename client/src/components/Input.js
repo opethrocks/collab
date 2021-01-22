@@ -36,6 +36,8 @@ function Input(props) {
   const createPlaceholder = (param) => {
     if (param === 'confirmPassword') {
       return 'Re-enter your password';
+    } else if (param === 'username') {
+      return 'Enter your preferred username';
     } else {
       return `Enter your ${param}`;
     }

@@ -1,24 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../context/userContext';
 import '../styles/Menu.css';
 
 function SideMenu(props) {
+  const [state] = useContext(UserContext);
+
   const [activeItem, setActiveItem] = useState();
   const displayMenuItem = () => {
     //Iterate menu items passed in from parent component
     return props.menuItem.map((item) => {
       return (
-        <a
-          key={item}
-          onClick={() => setActiveItem(item)}
-          className={activeItem === item ? 'active' : ''}
-          href={`#${item}`}
-        >
-          {item}
-        </a>
+        <nav>
+          <a
+            key={item}
+            onClick={() => setActiveItem(item)}
+            className={activeItem === item ? 'active' : ''}
+            href={`#${item}`}
+          >
+            {item}
+          </a>
+        </nav>
       );
     });
   };
-  return <div className="sidebar">{displayMenuItem()}</div>;
+  return (
+    <div className="sidebar">
+      <h3>{`${state.name}'s messages`}</h3>
+      {displayMenuItem()}
+    </div>
+  );
 }
 
 export default SideMenu;

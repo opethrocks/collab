@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 //Bring in input validator middleware
-const inputValidator = require('../../middlewares/credentialValidation');
+const credentialValidation = require('../../middlewares/credentialValidation');
 
 const router = express.Router();
 
@@ -12,8 +12,8 @@ const User = require('../../models/User');
 //Input validation
 const schema = require('../../models/Register');
 
-router.post('/', inputValidator(schema), async (req, res) => {
-  const { email, name, password } = req.body;
+router.post('/', credentialValidation(schema), async (req, res) => {
+  const { email, username, password } = req.body;
 
   //Search database for user
   try {
@@ -23,7 +23,7 @@ router.post('/', inputValidator(schema), async (req, res) => {
       return;
     } else {
       const newUser = new User({
-        name,
+        username,
         email,
         password
       });

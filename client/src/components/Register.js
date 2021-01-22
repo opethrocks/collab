@@ -18,8 +18,8 @@ function Register() {
       case 'email':
         setState((state) => ({ ...state, email: e.target.value }));
         break;
-      case 'name':
-        setState((state) => ({ ...state, name: e.target.value }));
+      case 'username':
+        setState((state) => ({ ...state, username: e.target.value }));
         break;
       case 'password':
         setState((state) => ({ ...state, password: e.target.value }));
@@ -59,7 +59,7 @@ function Register() {
         {displayErrorMessage('email')}
 
         <Input
-          param="name"
+          param="username"
           type="text"
           serverErrors={state.errors}
           handleChange={handleChange}

@@ -12,7 +12,7 @@ const useRegister = () => {
         email: state.email,
         password: state.password,
         confirmPassword: state.confirmPassword,
-        name: state.name
+        username: state.username
       })
       .then((res) => {
         //Here we set user as registered, show a status message
@@ -24,7 +24,7 @@ const useRegister = () => {
           email: undefined,
           password: undefined,
           confirmPassword: undefined,
-          name: undefined
+          username: undefined
         }));
         //Reset error messages in order to show error notification
         //for 5 seconds
@@ -47,7 +47,7 @@ const useRegister = () => {
             email: undefined,
             password: undefined,
             confirmPassword: undefined,
-            name: undefined
+            username: undefined
           }));
         }
         //Reset error messages in order to show error notification
