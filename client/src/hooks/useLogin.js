@@ -9,7 +9,7 @@ const useLogin = () => {
   //to authenticate user and retrieve a login token.
   function handleLogin() {
     axios
-      .post('http://localhost:5000/api/login', {
+      .post('/api/login', {
         email: state.email,
         password: state.password
       })
@@ -34,7 +34,7 @@ const useLogin = () => {
   //We then redirect to the login page.
   function handleLogout() {
     axios
-      .get('http://localhost:5000/api/logout')
+      .get('/api/logout')
       .then((res) => {
         setState((state) => ({}));
       })

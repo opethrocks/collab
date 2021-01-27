@@ -28,7 +28,7 @@ const UseMessage = () => {
   }
 
   function checkAuth() {
-    axios.post('http://localhost:5000/api/messages').catch((err) =>
+    axios.post('/api/messages').catch((err) =>
       setState((state) => ({
         ...state,
         authenticated: false,
