@@ -8,7 +8,7 @@ const useRegister = () => {
 
   const handleRegister = () => {
     axios
-      .post('http://localhost:5000/api/register', {
+      .post('/api/register', {
         email: state.email,
         password: state.password,
         confirmPassword: state.confirmPassword,
