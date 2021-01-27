@@ -45,7 +45,7 @@ router.post('/', inputValidator(schema), async (req, res) => {
         sameSite: 'strict'
       });
 
-      res.status(200).send({ name: user.name });
+      res.status(200).send({ username: user.username });
     }
   } catch (err) {
     console.log(err);
