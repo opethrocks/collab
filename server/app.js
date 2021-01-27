@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const WebSocket = require('ws');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -38,9 +39,6 @@ app.use(cookieParser());
 const corsOptions = { origin: 'http://localhost:3000', credentials: true };
 app.use(cors(corsOptions));
 
-//Port
-const port = process.env.PORT || 5000;
-
 //DB config
 const db = require('./config/keys').MongoURI;
 
@@ -51,8 +49,16 @@ mongoose
   .catch((err) => console.log(err));
 
 //Configure routes
-
 app.use('/api', require('./routes'));
+
+//determine environment
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(__dirname + '/public'));
+  app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'));
+}
+
+//Port
+const port = process.env.PORT || 5000;
 
 var server = app.listen(port, () =>
   console.log(`Server running on port ${port}`)
