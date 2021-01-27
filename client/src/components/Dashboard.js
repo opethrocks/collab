@@ -24,7 +24,7 @@ function Dashboard(props) {
   return (
     <div>
       <SideMenu menuItem={menuItems} />
-      <h1>{`${state.name}'s dashboard`}</h1>
+      <h1>{`${state.username}'s dashboard`}</h1>
     </div>
   );
 }

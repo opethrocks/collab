@@ -45,10 +45,16 @@ textarea:focus {
 .chat-container {
   display: flex;
   flex-flow: row-reverse wrap;
+  overflow-y: auto;
 }
 
 .flex-container {
   display: flex;
+}
+
+.outgoing-flex {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .outgoing-message {

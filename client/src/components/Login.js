@@ -9,16 +9,15 @@ import { UserContext } from '../context/userContext';
 function Login() {
   const [state, setState] = useContext(UserContext);
 
-  const { handleLogin, handleLogout } = useLogin();
-
-  if (state.authenticated === false) handleLogout();
+  const { handleLogin } = useLogin();
 
   //Keep input in sync with state in UserContext
   const handleChange = (e) => {
     if (e.target.name === 'email') {
       setState((state) => ({ ...state, email: e.target.value }));
+    } else if (e.target.name === 'password') {
+      setState((state) => ({ ...state, password: e.target.value }));
     }
-    setState((state) => ({ ...state, password: e.target.value }));
   };
 
   //Display error messages in red under input boxes

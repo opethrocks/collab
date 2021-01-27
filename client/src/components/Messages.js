@@ -1,53 +1,76 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import SideMenu from './SideMenu';
-import { UserContext } from '../context/userContext';
-import axios from 'axios';
-import { io } from 'socket.io-client';
+import useMessage from '../hooks/useMessage';
 import '../styles/Messages.css';
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { MessageContext } from '../context/messageContext';
+import { startWebsocketConnection, close } from '../websocket';
 
 library.add(fas, far, fab);
 
 dom.i2svg();
 
-function Messages(props) {
-  const [state, setState] = useContext(UserContext);
+function Messages() {
+  const [msgState, setMsgState] = useContext(MessageContext);
+  const [input, setInput] = useState();
+  const { sendMessage, checkAuth } = useMessage();
 
   const menuItems = ['Conversations', 'Group Messages', 'Favorites'];
 
   useEffect(() => {
-    const socket = io('http://localhost:5001');
-    axios
-      .post('http://localhost:5000/api/messages', { token: props.token })
-      .catch((err) =>
-        setState((state) => ({ ...state, authenticated: false }))
+    checkAuth();
+    startWebsocketConnection();
+
+    return () => close();
+  }, []);
+
+  const handleSend = () => {
+    sendMessage();
+    setInput('');
+  };
+
+  const incomingMessages = () => {
+    return msgState.messages.map((msg) => {
+      return (
+        <div className="flex-container">
+          <div className="incoming-message">{msg.text}</div>
+        </div>
       );
-  });
+    });
+  };
+
+  const outgoingMessages = () => {
+    return msgState.outgoing.map((msg) => {
+      return (
+        <div className="outgoing-flex">
+          <div className="outgoing-message">{msg}</div>
+        </div>
+      );
+    });
+  };
+
+  const handleChange = (e) => {
+    setInput(e.target.value);
+    setMsgState((msgState) => ({ ...msgState, text: input }));
+  };
 
   return (
     <div>
       <SideMenu menuItem={menuItems} />
       <div className="chat-container">
         <div className="chat-box">
-          <div className="flex-container">
-            <div className="incoming-message">
-              Test message, Hello world i like turtles
-            </div>
-          </div>
-
-          <div className="outgoing-message">
-            Test message, Hello world I eat pizza
-          </div>
+          {incomingMessages()}
+          {outgoingMessages()}
         </div>
       </div>
-      <button className="send-button">
-        <i class="fas fa-paper-plane fa-2x"></i>
+      <button className="send-button" onClick={handleSend}>
+        <i className="fas fa-paper-plane fa-2x"></i>
       </button>
       <div className="input-container">
-        <textarea />
+        <textarea value={input} onChange={handleChange} />
       </div>
     </div>
   );

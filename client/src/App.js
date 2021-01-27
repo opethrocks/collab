@@ -14,8 +14,9 @@ import Messages from './components/Messages';
 import './styles/App.css';
 import './styles/Alert.css';
 import { UserContext } from './context/userContext';
-import useLogin from './hooks/useLogin';
+import { MessageProvider } from './context/messageContext';
 
+import useLogin from './hooks/useLogin';
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -62,7 +63,9 @@ function App() {
           </Route>
           {/* Messages route */}
           <Route path="/messages">
-            <Messages />
+            <MessageProvider>
+              <Messages />
+            </MessageProvider>
           </Route>
         </Switch>
         {/* Redirect to login if user is registered */}

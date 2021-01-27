@@ -66,7 +66,7 @@ function Register() {
         />
 
         {/* If errors are present display error message in red */}
-        {displayErrorMessage('name')}
+        {displayErrorMessage('username')}
 
         <Input
           param="password"
@@ -88,7 +88,9 @@ function Register() {
         {/* If errors are present display error message in red */}
         {displayErrorMessage('confirmPassword')}
 
-        <button onClick={handleRegister}>Register</button>
+        <button className="login-button" onClick={handleRegister}>
+          Register
+        </button>
 
         {/* Link to login if user already registered */}
         <p>

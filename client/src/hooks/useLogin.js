@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
 import axios from 'axios';
 
@@ -17,7 +17,7 @@ const useLogin = () => {
         setState((state) => ({
           ...state,
           authenticated: true,
-          name: res.data.name,
+          username: res.data.username,
           errors: [{ msg: '', param: '' }],
           email: undefined,
           password: undefined,
