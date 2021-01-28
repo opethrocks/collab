@@ -1,30 +1,21 @@
 {
-  "name": "serverr",
+  "name": "collab",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "When finished this will be a collaboration app for teams to share documents, notes, schedules and includes chat functionality.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
-    "dev": "nodemon app.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opethrocks/collab.git"
+  },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^5.0.0",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "joi": "^17.3.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.6",
-    "secure-random": "^1.1.2",
-    "socket.io": "^3.1.0",
-    "uuid": "^8.3.2",
-    "ws": "^7.4.2"
+  "bugs": {
+    "url": "https://github.com/opethrocks/collab/issues"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.6"
-  }
+  "homepage": "https://github.com/opethrocks/collab#readme"
 }
