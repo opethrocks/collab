@@ -67,7 +67,7 @@ function Messages() {
         </div>
       </div>
       <button className="send-button" onClick={handleSend}>
-        <i className="fas fa-paper-plane fa-2x"></i>
+        {/* <i className="fas fa-paper-plane fa-2x"></i> */}
       </button>
       <div className="input-container">
         <textarea value={input} onChange={handleChange} />
