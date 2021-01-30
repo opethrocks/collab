@@ -20,26 +20,9 @@ const TokenSchema = new mongoose.Schema({
   }
 });
 
-//Generate access token
+//Generate Auth Token
 
-// TokenSchema.methods.generateAccessToken = function (user) {
-//   const key =
-//     process.env.NODE_ENV === 'production'
-//       ? process.env.JWT_KEY
-//       : require('../config/keys').jwtAccessKey;
-
-//   const payload = {
-//     sub: user._id,
-//     name: user.name
-//   };
-//   const accessToken = jwt.sign(payload, key, { expiresIn: 60 });
-
-//   return accessToken;
-// };
-
-//Generate Refresh Token
-
-TokenSchema.methods.generateRefreshToken = function (user) {
+TokenSchema.methods.generateToken = function (user) {
   const key =
     process.env.NODE_ENV === 'production'
       ? process.env.JWT_KEY
@@ -48,12 +31,12 @@ TokenSchema.methods.generateRefreshToken = function (user) {
   const payload = {
     sub: user._id
   };
-  const refreshToken = jwt.sign(payload, key, {
+  const token = jwt.sign(payload, key, {
     expiresIn: 60 * 60 * 24
   });
 
-  return refreshToken;
+  return token;
 };
 
 mongoose.model('token', TokenSchema);
-module.exports = mongoose.model('Token', TokenSchema);
+module.exports = mongoose.model('token', TokenSchema);

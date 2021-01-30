@@ -3,9 +3,6 @@ const bcrypt = require('bcrypt');
 //Bring in input validator middleware
 const inputValidator = require('../../middlewares/credentialValidation');
 
-//Bring in token authentication
-// const auth = require('../../auth/index');
-
 const router = express.Router();
 
 //Mongoose User Schema
@@ -30,16 +27,16 @@ router.post('/', inputValidator(schema), async (req, res) => {
         .json({ errors: [{ msg: 'User not found', param: 'email' }] });
     }
 
+    //Check password, If correct generate a login token
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(400).json({
         errors: [{ msg: 'Password is incorrect', param: 'password' }]
       });
     } else {
-      // const accessToken = token.generateAccessToken(user);
-      const refreshToken = token.generateRefreshToken(user);
+      const authToken = token.generateToken(user);
 
-      res.cookie('token', refreshToken, {
+      res.cookie('token', authToken, {
         secure: process.env == 'Production' ? true : false,
         httpOnly: true,
         sameSite: 'strict'
