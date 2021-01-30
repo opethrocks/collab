@@ -23,12 +23,16 @@ const TokenSchema = new mongoose.Schema({
 //Generate access token
 
 TokenSchema.methods.generateAccessToken = function (user) {
-  const { jwtAccessKey } = require('../config/keys');
+  const key =
+    process.env.NODE_ENV === 'production'
+      ? process.env.JWT_KEY
+      : require('../config/keys').jwtAccessKey;
+
   const payload = {
     sub: user._id,
     name: user.name
   };
-  const accessToken = jwt.sign(payload, jwtAccessKey, { expiresIn: 60 });
+  const accessToken = jwt.sign(payload, key, { expiresIn: 60 });
 
   return accessToken;
 };

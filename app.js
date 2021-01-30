@@ -40,14 +40,14 @@ const corsOptions = { origin: 'http://localhost:3000', credentials: true };
 app.use(cors(corsOptions));
 
 //DB config
-const db =
+const uri =
   process.env.NODE_ENV === 'production'
     ? process.env.MONGODB_URI
     : require('./server/config/keys').MongoURI;
 
 //Connect to mongo
 mongoose
-  .connect(db, {
+  .connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })

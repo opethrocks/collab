@@ -2,7 +2,10 @@
 const jwt = require('jsonwebtoken');
 
 //JWT signing keys
-const { jwtRefreshKey } = require('../config/keys');
+const key =
+  process.env.NODE_ENV === 'production'
+    ? process.env.JWT_KEY
+    : require('../config/keys').jwtAccessKey;
 
 //Mongoose user model
 const User = require('../models/User');
@@ -14,7 +17,7 @@ const tokenValidator = () => {
     const token = req.cookies.token;
 
     try {
-      const decodedToken = await jwt.verify(token, jwtRefreshKey);
+      const decodedToken = await jwt.verify(token, key);
       const user = await User.findOne({ _id: decodedToken.sub });
 
       return res.status(200).send({ username: user.username });
