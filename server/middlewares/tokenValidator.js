@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const key =
   process.env.NODE_ENV === 'production'
     ? process.env.JWT_KEY
-    : require('../config/keys').jwtAccessKey;
+    : require('../config/keys').jwtKey;
 
 //Mongoose user model
 const User = require('../models/User');

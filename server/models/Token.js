@@ -22,29 +22,33 @@ const TokenSchema = new mongoose.Schema({
 
 //Generate access token
 
-TokenSchema.methods.generateAccessToken = function (user) {
-  const key =
-    process.env.NODE_ENV === 'production'
-      ? process.env.JWT_KEY
-      : require('../config/keys').jwtAccessKey;
+// TokenSchema.methods.generateAccessToken = function (user) {
+//   const key =
+//     process.env.NODE_ENV === 'production'
+//       ? process.env.JWT_KEY
+//       : require('../config/keys').jwtAccessKey;
 
-  const payload = {
-    sub: user._id,
-    name: user.name
-  };
-  const accessToken = jwt.sign(payload, key, { expiresIn: 60 });
+//   const payload = {
+//     sub: user._id,
+//     name: user.name
+//   };
+//   const accessToken = jwt.sign(payload, key, { expiresIn: 60 });
 
-  return accessToken;
-};
+//   return accessToken;
+// };
 
 //Generate Refresh Token
 
 TokenSchema.methods.generateRefreshToken = function (user) {
-  const { jwtRefreshKey } = require('../config/keys');
+  const key =
+    process.env.NODE_ENV === 'production'
+      ? process.env.JWT_KEY
+      : require('../config/keys').jwtKey;
+
   const payload = {
     sub: user._id
   };
-  const refreshToken = jwt.sign(payload, jwtRefreshKey, {
+  const refreshToken = jwt.sign(payload, key, {
     expiresIn: 60 * 60 * 24
   });
 
