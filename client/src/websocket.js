@@ -19,7 +19,7 @@ let onMessageCallback;
 // to the server
 export const startWebsocketConnection = () => {
   // A new Websocket connection is initialized with the server
-  const ws = new window.WebSocket('ws://' + host + '/api/messages') || {};
+  const ws = new window.WebSocket('wss://' + host + '/api/messages') || {};
 
   // If the connection is successfully opened, we log to the console
   ws.onopen = () => {
