@@ -2,16 +2,16 @@ import React, { useContext, useState, useEffect } from 'react';
 import SideMenu from './SideMenu';
 import useMessage from '../hooks/useMessage';
 import '../styles/Messages.css';
-// import { library, dom } from '@fortawesome/fontawesome-svg-core';
-// import { fas } from '@fortawesome/free-solid-svg-icons';
-// import { far } from '@fortawesome/free-regular-svg-icons';
-// import { fab } from '@fortawesome/free-brands-svg-icons';
+import { library, dom } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 import { MessageContext } from '../context/messageContext';
 import { startWebsocketConnection, close } from '../websocket';
 
-// library.add(fas, far, fab);
+library.add(fas, far, fab);
 
-// dom.i2svg();
+dom.i2svg();
 
 function Messages() {
   const [msgState, setMsgState] = useContext(MessageContext);
@@ -67,7 +67,7 @@ function Messages() {
         </div>
       </div>
       <button className="send-button" onClick={handleSend}>
-        {/* <i className="fas fa-paper-plane fa-2x"></i> */}
+        <i className="fas fa-paper-plane fa-2x"></i>
       </button>
       <div className="input-container">
         <textarea value={input} onChange={handleChange} />
