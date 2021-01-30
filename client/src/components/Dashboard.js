@@ -12,7 +12,11 @@ function Dashboard(props) {
   //On Component mount make api to api/tokenValidator to
   //validate the auth token, if not authenticated then log user out.
   useEffect(() => {
+<<<<<<< HEAD
     axios.post('http://localhost:5000/api/dashboard').catch((err) => {
+=======
+    axios.post('/api/dashboard').catch((err) => {
+>>>>>>> 852d9d6... Reinitialize
       setState((state) => ({
         ...state,
         authenticated: false,
