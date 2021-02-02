@@ -5,8 +5,10 @@ const router = express.Router();
 
 const tokenValidator = require('../../middlewares/tokenValidator');
 
+const port = process.env.PORT || 8080;
+
 //Web socket server
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port });
 
 //Broadcast messages to all connected clients
 wss.on('connection', function connection(ws) {
