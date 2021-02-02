@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const WebSocket = require('ws');
 const path = require('path');
+const WebSocket = require('ws');
 
 require('dotenv').config();
 
@@ -27,6 +27,9 @@ wss.on('connection', function connection(ws) {
     });
   });
 });
+
+//Web socket connection
+// const wss = require('./server/websocket/websocket').wss;
 
 //Body Parser
 app.use(express.json());

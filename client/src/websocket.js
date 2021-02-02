@@ -12,6 +12,7 @@ const host =
 // later (just know that it is exported for now)
 export let send;
 export let close;
+
 // The onMessageCallback is also assigned later, as we will soon see
 let onMessageCallback;
 
@@ -19,7 +20,10 @@ let onMessageCallback;
 // to the server
 export const startWebsocketConnection = () => {
   // A new Websocket connection is initialized with the server
-  const ws = new window.WebSocket('wss://' + host + '/api/messages') || {};
+  const ws =
+    process.env.NODE_ENV === 'production'
+      ? new window.WebSocket('wss://' + host + '/api/messages') || {}
+      : new window.WebSocket('ws://' + host + '/api/messages') || {};
 
   // If the connection is successfully opened, we log to the console
   ws.onopen = () => {
@@ -34,6 +38,10 @@ export const startWebsocketConnection = () => {
 
   // This callback is called everytime a message is received.
   ws.onmessage = (e) => {
+    //Handle ping from server
+    if (e.data.text === 'ping') {
+      ws.send('pong');
+    }
     // The onMessageCallback function is called with the message
     // data as the argument
     onMessageCallback && onMessageCallback(e.data);

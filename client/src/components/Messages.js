@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import SideMenu from './SideMenu';
 import useMessage from '../hooks/useMessage';
 import '../styles/Messages.css';
@@ -15,7 +15,6 @@ dom.i2svg();
 
 function Messages() {
   const [msgState, setMsgState] = useContext(MessageContext);
-  const [input, setInput] = useState();
   const { sendMessage, checkAuth } = useMessage();
 
   const menuItems = ['Conversations', 'Group Messages', 'Favorites'];
@@ -23,13 +22,14 @@ function Messages() {
   useEffect(() => {
     checkAuth();
     startWebsocketConnection();
-
-    return () => close();
+    return () => {
+      close();
+    };
   }, []);
 
   const handleSend = () => {
     sendMessage();
-    setInput('');
+    setMsgState((msgState) => ({ ...msgState, text: '' }));
   };
 
   const incomingMessages = () => {
@@ -53,8 +53,7 @@ function Messages() {
   };
 
   const handleChange = (e) => {
-    setInput(e.target.value);
-    setMsgState((msgState) => ({ ...msgState, text: input }));
+    setMsgState((msgState) => ({ ...msgState, text: e.target.value }));
   };
 
   return (
@@ -70,7 +69,7 @@ function Messages() {
         <i className="fas fa-paper-plane fa-2x"></i>
       </button>
       <div className="input-container">
-        <textarea value={input} onChange={handleChange} />
+        <textarea value={msgState.text} onChange={handleChange} />
       </div>
     </div>
   );
