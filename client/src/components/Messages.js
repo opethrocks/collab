@@ -32,21 +32,23 @@ function Messages() {
     setMsgState((msgState) => ({ ...msgState, text: '' }));
   };
 
-  const incomingMessages = () => {
-    return msgState.messages.map((msg) => {
-      return (
-        <div className="flex-container">
-          <div className="incoming-message">{msg.text}</div>
-        </div>
-      );
-    });
-  };
+  const handleMessages = () => {
+    return msgState.messages.map((msg, index) => {
+      if (msg.incoming) {
+        return (
+          <div className="incoming-flex">
+            <div className="incoming-message" id={index}>
+              {msg.text}
+            </div>
+          </div>
+        );
+      }
 
-  const outgoingMessages = () => {
-    return msgState.outgoing.map((msg) => {
       return (
         <div className="outgoing-flex">
-          <div className="outgoing-message">{msg}</div>
+          <div className="outgoing-message" id={index}>
+            {msg.text}
+          </div>
         </div>
       );
     });
@@ -60,10 +62,7 @@ function Messages() {
     <div>
       <SideMenu menuItem={menuItems} />
       <div className="chat-container">
-        <div className="chat-box">
-          {incomingMessages()}
-          {outgoingMessages()}
-        </div>
+        <div className="chat-box">{handleMessages()}</div>
       </div>
       <button className="send-button" onClick={handleSend}>
         <i className="fas fa-paper-plane fa-2x"></i>

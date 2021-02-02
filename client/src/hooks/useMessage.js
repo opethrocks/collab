@@ -14,7 +14,7 @@ const UseMessage = () => {
     let msg = JSON.parse(event);
     setMsgState((msgState) => ({
       ...msgState,
-      messages: msgState.messages.concat(msg)
+      messages: msgState.messages.concat({ text: msg.text, incoming: true })
     }));
   }
 
@@ -40,7 +40,10 @@ const UseMessage = () => {
   function handleOutgoing() {
     setMsgState((msgState) => ({
       ...msgState,
-      outgoing: msgState.outgoing.concat(msgState.text)
+      messages: msgState.messages.concat({
+        text: msgState.text,
+        incoming: false
+      })
     }));
   }
 

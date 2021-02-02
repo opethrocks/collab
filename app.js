@@ -3,33 +3,10 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const WebSocket = require('ws');
 
 require('dotenv').config();
 
 const app = express();
-
-//Web socket server
-const wss = new WebSocket.Server({
-  noServer: true,
-  autoAcceptConnections: false,
-  clientTracking: true
-});
-
-//Broadcast messages to all connected clients
-
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(data) {
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(data);
-      }
-    });
-  });
-});
-
-//Web socket connection
-// const wss = require('./server/websocket/websocket').wss;
 
 //Body Parser
 app.use(express.json());
@@ -71,12 +48,4 @@ if (process.env.NODE_ENV === 'production') {
 //Port
 const port = process.env.PORT || 5000;
 
-var server = app.listen(port, () =>
-  console.log(`Server running on port ${port}`)
-);
-
-server.on('upgrade', (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, (socket) => {
-    wss.emit('connection', socket, request);
-  });
-});
+app.listen(port, () => console.log(`Server running on port ${port}`));

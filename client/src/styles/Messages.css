@@ -48,13 +48,16 @@ textarea:focus {
   overflow-y: auto;
 }
 
-.flex-container {
+.incoming-flex {
   display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
 }
 
 .outgoing-flex {
   display: flex;
-  justify-content: flex-end;
+  flex-flow: column nowrap;
+  align-items: flex-end;
 }
 
 .outgoing-message {

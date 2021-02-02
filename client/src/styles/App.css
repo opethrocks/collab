@@ -39,7 +39,7 @@
 
 /* Navbar style */
 
-ul {
+nav {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -65,7 +65,7 @@ li a {
   text-decoration: none;
 }
 
-/* Change the link color to #111 (black) on hover */
+/* Change the link color on hover */
 li a:hover {
   background-color: #75e4b9;
 }
