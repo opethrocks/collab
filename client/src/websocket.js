@@ -15,7 +15,7 @@ export const startWebsocketConnection = (auth) => {
   // A new Websocket connection is initialized with the server
   const ws =
     process.env.NODE_ENV === 'production'
-      ? new window.WebSocket('wss://window.location.host') || {}
+      ? new window.WebSocket(`wss://${process.env.PORT}`) || {}
       : new window.WebSocket('ws://localhost:5000') || {};
 
   // If the connection is successfully opened, we log to the console
