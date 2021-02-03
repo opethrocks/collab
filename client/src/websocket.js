@@ -12,10 +12,12 @@ export const startWebsocketConnection = (auth) => {
   //Import state from UserContext to check if user is authenticated
   //before we restart a closed connection
 
+  const port = process.env.PORT || 5000;
+
   // A new Websocket connection is initialized with the server
   const ws =
     process.env.NODE_ENV === 'production'
-      ? new window.WebSocket(`wss://${process.env.PORT}`) || {}
+      ? new window.WebSocket(`wss://${window.location.host}`) || {}
       : new window.WebSocket('ws://localhost:5000') || {};
 
   // If the connection is successfully opened, we log to the console
