@@ -36,19 +36,15 @@ function Messages() {
     return msgState.messages.map((msg, index) => {
       if (msg.incoming) {
         return (
-          <div className="incoming-flex">
-            <div className="incoming-message" id={index}>
-              {msg.text}
-            </div>
+          <div className="incoming-flex" key={index}>
+            <div className="incoming-message">{msg.text}</div>
           </div>
         );
       }
 
       return (
-        <div className="outgoing-flex">
-          <div className="outgoing-message" id={index}>
-            {msg.text}
-          </div>
+        <div className="outgoing-flex" key={index}>
+          <div className="outgoing-message">{msg.text}</div>
         </div>
       );
     });

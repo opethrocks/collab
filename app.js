@@ -38,20 +38,6 @@ mongoose
 //Configure routes
 app.use('/api', require('./server/routes'));
 
-//Web socket server
-const wss = new WebSocket.Server({ port: process.env.PORT || 8080 });
-
-//Broadcast messages to all connected clients
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(data) {
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(data);
-      }
-    });
-  });
-});
-
 // //determine environment
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
@@ -70,5 +56,19 @@ const server = app.listen(port, () =>
 server.on('upgrade', (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, (socket) => {
     wss.emit('connection', socket, request);
+  });
+});
+
+//Web socket server
+const wss = new WebSocket.Server({ noServer: true });
+
+//Broadcast messages to all connected clients
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(data) {
+    wss.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
+    });
   });
 });

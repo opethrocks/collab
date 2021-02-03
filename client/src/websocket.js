@@ -6,7 +6,7 @@
 const host =
   process.env.NODE_ENV === 'production'
     ? window.location.host
-    : 'localhost:8080';
+    : 'localhost:5000';
 
 // We create an exported variable `send`, that we will assign
 // later (just know that it is exported for now)
