@@ -1,10 +1,11 @@
 import { useContext } from 'react';
 import { MessageContext } from '../context/messageContext';
 import { UserContext } from '../context/userContext';
-import { send, registerOnMessageCallback } from '../websocket';
+import { registerOnMessageCallback, send } from '../websocket';
 import axios from 'axios';
 
 const UseMessage = () => {
+  //Callback called when message is recieved from websocket
   registerOnMessageCallback(recieveMessage);
 
   const [msgState, setMsgState] = useContext(MessageContext);

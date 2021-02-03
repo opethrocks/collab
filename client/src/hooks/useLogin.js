@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
 import axios from 'axios';
+import { startWebsocketConnection, close } from '../websocket';
 
 const useLogin = () => {
   const [state, setState] = useContext(UserContext);
@@ -23,6 +24,7 @@ const useLogin = () => {
           password: undefined,
           status: undefined
         }));
+        startWebsocketConnection(state.authenticated);
       })
       //If any errors, set appropriate state for error display on login component
       .catch((err) =>
@@ -37,6 +39,7 @@ const useLogin = () => {
       .get('/api/logout')
       .then((res) => {
         setState((state) => ({}));
+        close();
       })
       .catch((err) => console.log(err.message));
   }
