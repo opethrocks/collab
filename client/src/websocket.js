@@ -4,7 +4,7 @@ export let send;
 // A new Websocket connection is initialized with the server
 const url =
   process.env.NODE_ENV === 'production'
-    ? 'wss://window.location.host'
+    ? `wss://${window.location.host}`
     : 'ws://localhost:5000';
 
 export const connection = new WebSocket(url);
@@ -22,7 +22,7 @@ export const websocket = () => {
   };
 
   connection.onerror = (error) => {
-    console.log(`Websocket error ${error}`);
+    console.log(`Websocket error ${error.reason}`);
   };
 
   connection.onclose = (e) => {
