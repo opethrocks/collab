@@ -1,7 +1,12 @@
 import { useContext } from 'react';
 import { MessageContext } from '../context/messageContext';
 import { UserContext } from '../context/userContext';
-import { registerOnMessageCallback, send } from '../websocket';
+import {
+  connection,
+  registerOnMessageCallback,
+  send,
+  websocket
+} from '../websocket';
 import axios from 'axios';
 
 const UseMessage = () => {
@@ -15,7 +20,11 @@ const UseMessage = () => {
     let msg = JSON.parse(event);
     setMsgState((msgState) => ({
       ...msgState,
-      messages: msgState.messages.concat({ text: msg.text, incoming: true })
+      messages: msgState.messages.concat({
+        text: msg.text,
+        incoming: true,
+        timestamp: new Date().toLocaleString()
+      })
     }));
   }
 
@@ -29,13 +38,16 @@ const UseMessage = () => {
   }
 
   function checkAuth() {
-    axios.post('/api/messages').catch((err) =>
-      setState((state) => ({
-        ...state,
-        authenticated: false,
-        status: err.response.data.msg
-      }))
-    );
+    axios
+      .post('/api/messages')
+      .then()
+      .catch((err) =>
+        setState((state) => ({
+          ...state,
+          authenticated: false,
+          status: err.response.data.msg
+        }))
+      );
   }
 
   function handleOutgoing() {
@@ -43,12 +55,20 @@ const UseMessage = () => {
       ...msgState,
       messages: msgState.messages.concat({
         text: msgState.text,
-        incoming: false
+        incoming: false,
+        timestamp: new Date().toLocaleString()
       })
     }));
   }
+  function startWebsocket() {
+    websocket();
+  }
 
-  return { sendMessage, checkAuth };
+  function wsConnection() {
+    return connection;
+  }
+
+  return { sendMessage, checkAuth, startWebsocket, wsConnection };
 };
 
 export default UseMessage;

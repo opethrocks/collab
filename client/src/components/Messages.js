@@ -14,12 +14,13 @@ dom.i2svg();
 
 function Messages() {
   const [msgState, setMsgState] = useContext(MessageContext);
-  const { sendMessage, checkAuth } = useMessage();
+  const { sendMessage, checkAuth, startWebsocket, wsConnection } = useMessage();
 
   const menuItems = ['Conversations', 'Group Messages', 'Favorites'];
 
   useEffect(() => {
     checkAuth();
+    startWebsocket();
   }, []);
 
   const handleSend = () => {
@@ -32,12 +33,14 @@ function Messages() {
       if (msg.incoming) {
         return (
           <div className="incoming-flex" key={index}>
+            <p>{msg.timestamp}</p>
             <div className="incoming-message">{msg.text}</div>
           </div>
         );
       }
       return (
         <div className="outgoing-flex" key={index}>
+          <p>{msg.timestamp}</p>
           <div className="outgoing-message">{msg.text}</div>
         </div>
       );
@@ -46,6 +49,12 @@ function Messages() {
 
   const handleChange = (e) => {
     setMsgState((msgState) => ({ ...msgState, text: e.target.value }));
+  };
+
+  const checkWsConnection = () => {
+    if (wsConnection.readyState === 'CLOSED') {
+      startWebsocket();
+    }
   };
 
   return (
@@ -58,7 +67,11 @@ function Messages() {
         <i className="fas fa-paper-plane fa-2x"></i>
       </button>
       <div className="input-container">
-        <textarea value={msgState.text} onChange={handleChange} />
+        <textarea
+          value={msgState.text}
+          onChange={handleChange}
+          onClick={checkWsConnection}
+        />
       </div>
     </div>
   );

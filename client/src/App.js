@@ -16,17 +16,10 @@ import './styles/Alert.css';
 import { UserContext } from './context/userContext';
 import { MessageProvider } from './context/messageContext';
 
-import useLogin from './hooks/useLogin';
 axios.defaults.withCredentials = true;
 
 function App() {
   const [state] = useContext(UserContext);
-
-  const { handleLogout } = useLogin();
-
-  //If user is ever unauthenticated, make request to api/logout to
-  //remove the token and log the user out
-  if (state.authenticated === false) handleLogout();
 
   //Display notification box when status changes
   const displayNotification = () => {
