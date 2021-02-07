@@ -7,35 +7,28 @@ const url =
     ? `wss://${window.location.host}`
     : 'ws://localhost:5000';
 
-export const connection = new WebSocket(url);
-
-function heartbeat() {
-  setTimeout(() => {
-    connection.terminate();
-  }, 30000 + 1000);
-}
+const ws = new WebSocket(url);
 
 export const websocket = () => {
-  connection.onopen = () => {
+  ws.onopen = () => {
     console.log('Websocket open');
-    heartbeat();
   };
 
-  connection.onerror = (error) => {
+  ws.onerror = (error) => {
     console.log(`Websocket error ${error.reason}`);
   };
 
-  connection.onclose = (e) => {
-    clearTimeout(heartbeat);
+  ws.onclose = (e) => {
     console.log(`Websocket closed ${(e.code, e.reason)}`);
   };
 
-  connection.onmessage = (e) => {
-    if (e.data === 'ping') heartbeat();
+  ws.onmessage = (e) => {
     onMessageCallback && onMessageCallback(e.data);
   };
-  send = connection.send.bind(connection);
+  send = ws.send.bind(ws);
 };
+
+export const readyState = ws.readyState;
 
 export const registerOnMessageCallback = (fn) => {
   onMessageCallback = fn;

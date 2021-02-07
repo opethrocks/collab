@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import SideMenu from './SideMenu';
 import useMessage from '../hooks/useMessage';
 import '../styles/Messages.css';
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
@@ -7,6 +6,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { MessageContext } from '../context/messageContext';
+import { readyState, websocket } from '../websocket';
 
 library.add(fas, far, fab);
 
@@ -14,13 +14,12 @@ dom.i2svg();
 
 function Messages() {
   const [msgState, setMsgState] = useContext(MessageContext);
-  const { sendMessage, checkAuth, startWebsocket, wsConnection } = useMessage();
+  const { sendMessage, checkAuth } = useMessage();
 
   const menuItems = ['Conversations', 'Group Messages', 'Favorites'];
 
   useEffect(() => {
     checkAuth();
-    startWebsocket();
   }, []);
 
   const handleSend = () => {
@@ -51,27 +50,26 @@ function Messages() {
     setMsgState((msgState) => ({ ...msgState, text: e.target.value }));
   };
 
-  const checkWsConnection = () => {
-    if (wsConnection.readyState === 'CLOSED') {
-      startWebsocket();
+  const checkWS = () => {
+    if (readyState === 0) {
+      websocket();
     }
   };
 
   return (
     <div>
-      <SideMenu menuItem={menuItems} />
       <div className="chat-container">
         <div className="chat-box">{handleMessages()}</div>
       </div>
-      <button className="send-button" onClick={handleSend}>
-        <i className="fas fa-paper-plane fa-2x"></i>
-      </button>
       <div className="input-container">
         <textarea
           value={msgState.text}
           onChange={handleChange}
-          onClick={checkWsConnection}
+          onClick={checkWS}
         />
+        <button className="send-button" onClick={handleSend}>
+          <i className="fas fa-paper-plane fa-2x"></i>
+        </button>
       </div>
     </div>
   );

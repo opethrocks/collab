@@ -1,7 +1,8 @@
 .chat-box {
-  height: 80vh;
-  width: 70%;
+  height: auto;
+  width: 100%;
   box-sizing: content-box;
+  padding: 20px;
 }
 
 .send-button {
@@ -21,8 +22,9 @@ label {
 }
 
 textarea {
-  padding: 8px;
-  margin: 15px;
+  padding: 10px;
+  width: 90%;
+  margin: 5px;
   font-size: large;
   font-family: 'Montserrat', sans-serif;
   border: 2px solid rgb(196, 196, 196);
@@ -37,15 +39,16 @@ textarea:focus {
 
 .input-container {
   display: flex;
-  flex-direction: column-reverse;
-  width: 70%;
-  float: right;
+  flex-flow: row nowrap;
+  align-items: center;
+  width: 100%;
 }
 
 .chat-container {
   display: flex;
   flex-flow: row-reverse wrap;
   overflow-y: auto;
+  height: 85vh;
 }
 
 .incoming-flex {
