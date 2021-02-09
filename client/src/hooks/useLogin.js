@@ -14,7 +14,7 @@ const useLogin = () => {
         password: state.password,
       });
 
-      setState((state) => ({
+      setState({
         ...state,
         authenticated: true,
         username: res.data.username,
@@ -22,10 +22,10 @@ const useLogin = () => {
         email: undefined,
         password: undefined,
         status: undefined,
-      }));
+      });
     } catch (err) {
       //If any errors, set appropriate state for error display on login component
-      setState((state) => ({ ...state, errors: err.response.data.errors }));
+      setState({ ...state, errors: err.response.data.errors });
     }
   }
   //In order to log out, we make a request to api/logout to delete
@@ -34,7 +34,7 @@ const useLogin = () => {
   async function handleLogout() {
     try {
       await axios.get('/api/logout');
-      setState(() => ({}));
+      setState({});
     } catch (err) {
       console.log(err.message);
     }

@@ -1,12 +1,7 @@
 import { useContext } from 'react';
 import { MessageContext } from '../context/messageContext';
 import { UserContext } from '../context/userContext';
-import {
-  registerOnMessageCallback,
-  send,
-  websocket,
-  readyState,
-} from '../websocket';
+import { registerOnMessageCallback, send } from '../websocket';
 import axios from 'axios';
 
 const UseMessage = () => {
@@ -18,14 +13,15 @@ const UseMessage = () => {
 
   function recieveMessage(event) {
     let msg = JSON.parse(event);
-    setMsgState((msgState) => ({
+    setMsgState({
       ...msgState,
+      user: msg.username,
       messages: msgState.messages.concat({
         text: msg.text,
         incoming: true,
         timestamp: new Date().toLocaleString(),
       }),
-    }));
+    });
   }
 
   function sendMessage() {
@@ -34,33 +30,31 @@ const UseMessage = () => {
       text: msgState.text,
     };
     send(JSON.stringify(message));
-    handleOutgoing();
+    handleSend();
   }
 
-  async function checkAuth() {
-    try {
-      await axios.post('/api/messages');
-      if (readyState === 0) {
-        websocket();
-      }
-    } catch (err) {
-      setState((state) => ({
-        ...state,
-        authenticated: false,
-        status: err.response.data.msg,
-      }));
-    }
-  }
-
-  function handleOutgoing() {
-    setMsgState((msgState) => ({
+  function handleSend() {
+    setMsgState({
       ...msgState,
+      text: '',
       messages: msgState.messages.concat({
         text: msgState.text,
         incoming: false,
         timestamp: new Date().toLocaleString(),
       }),
-    }));
+    });
+  }
+
+  async function checkAuth() {
+    try {
+      await axios.post('/api/messages');
+    } catch (err) {
+      setState({
+        ...state,
+        authenticated: false,
+        status: err.response.data.msg,
+      });
+    }
   }
 
   return { sendMessage, checkAuth };

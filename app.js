@@ -88,7 +88,6 @@ wss.on('connection', function connection(ws) {
   ws.on('close', function close() {
     ws.terminate();
     clearInterval(interval);
-    wss;
   });
 });
 

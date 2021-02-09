@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import useMessage from '../hooks/useMessage';
 import '../styles/Messages.css';
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
@@ -6,7 +6,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { MessageContext } from '../context/messageContext';
-import { readyState, websocket } from '../websocket';
+import { createWebSocketConnection, close } from '../websocket';
 
 library.add(fas, far, fab);
 
@@ -16,15 +16,26 @@ function Messages() {
   const [msgState, setMsgState] = useContext(MessageContext);
   const { sendMessage, checkAuth } = useMessage();
 
+  const chat = useRef(null);
+
   const menuItems = ['Conversations', 'Group Messages', 'Favorites'];
 
   useEffect(() => {
+    chat.current.scrollTop =
+      chat.current.scrollHeight - chat.current.clientHeight;
+  });
+
+  useEffect(() => {
     checkAuth();
+    createWebSocketConnection();
+  }, []);
+
+  useEffect(() => {
+    return () => close();
   }, []);
 
   const handleSend = () => {
     sendMessage();
-    setMsgState((msgState) => ({ ...msgState, text: '' }));
   };
 
   const handleMessages = () => {
@@ -32,7 +43,11 @@ function Messages() {
       if (msg.incoming) {
         return (
           <div className="incoming-flex" key={index}>
-            <p>{msg.timestamp}</p>
+            {msgState.user && (
+              <p>
+                Message from {msgState.user} @ {msg.timestamp}
+              </p>
+            )}
             <div className="incoming-message">{msg.text}</div>
           </div>
         );
@@ -40,6 +55,7 @@ function Messages() {
       return (
         <div className="outgoing-flex" key={index}>
           <p>{msg.timestamp}</p>
+
           <div className="outgoing-message">{msg.text}</div>
         </div>
       );
@@ -50,23 +66,13 @@ function Messages() {
     setMsgState((msgState) => ({ ...msgState, text: e.target.value }));
   };
 
-  const checkWS = () => {
-    if (readyState === 0) {
-      websocket();
-    }
-  };
-
   return (
     <div>
-      <div className="chat-container">
+      <div className="chat-container" ref={chat}>
         <div className="chat-box">{handleMessages()}</div>
       </div>
       <div className="input-container">
-        <textarea
-          value={msgState.text}
-          onChange={handleChange}
-          onClick={checkWS}
-        />
+        <textarea value={msgState.text} onChange={handleChange} />
         <button className="send-button" onClick={handleSend}>
           <i className="fas fa-paper-plane fa-2x"></i>
         </button>

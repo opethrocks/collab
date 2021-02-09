@@ -1,19 +1,22 @@
 let onMessageCallback;
 export let send;
+export let close;
 
-// A new Websocket connection is initialized with the server
-const url =
-  process.env.NODE_ENV === 'production'
-    ? `wss://${window.location.host}`
-    : 'ws://localhost:5000';
+function createWebSocketConnection() {
+  // A new Websocket connection is initialized with the server
+  const url =
+    process.env.NODE_ENV === 'production'
+      ? `wss://${window.location.host}`
+      : 'ws://localhost:5000';
 
-const ws = new WebSocket(url);
+  const ws = new WebSocket(url);
 
-export const websocket = () => {
   ws.onopen = () => {
     console.log('Websocket open');
   };
-
+  ws.onmessage = (e) => {
+    onMessageCallback && onMessageCallback(e.data);
+  };
   ws.onerror = (error) => {
     console.log(`Websocket error ${error.reason}`);
   };
@@ -22,14 +25,14 @@ export const websocket = () => {
     console.log(`Websocket closed ${(e.code, e.reason)}`);
   };
 
-  ws.onmessage = (e) => {
-    onMessageCallback && onMessageCallback(e.data);
-  };
   send = ws.send.bind(ws);
-};
+  close = ws.close.bind(ws);
 
-export const readyState = ws.readyState;
+  return ws;
+}
 
-export const registerOnMessageCallback = (fn) => {
+function registerOnMessageCallback(fn) {
   onMessageCallback = fn;
-};
+}
+
+export { createWebSocketConnection, registerOnMessageCallback };

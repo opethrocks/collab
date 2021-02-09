@@ -48,7 +48,8 @@ textarea:focus {
   display: flex;
   flex-flow: row-reverse wrap;
   overflow-y: auto;
-  height: 85vh;
+  height: 83vh;
+  padding: 0px 50px 0px 50px;
 }
 
 .incoming-flex {

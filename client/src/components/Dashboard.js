@@ -16,14 +16,13 @@ function Dashboard(props) {
       setState((state) => ({
         ...state,
         authenticated: false,
-        status: err.response.data.msg
+        status: err.response.data.msg,
       }));
     });
   });
 
   return (
     <div>
-      <SideMenu menuItem={menuItems} />
       <h1>{`${state.username}'s dashboard`}</h1>
     </div>
   );
