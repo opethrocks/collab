@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../context/userContext';
-import '../styles/Menu.css';
 
 function SideMenu() {
   const [state] = useContext(UserContext);

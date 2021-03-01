@@ -1,5 +1,24 @@
 import React from 'react';
-import '../styles/Login.css';
+import styled from 'styled-components';
+
+const LabelStyles = styled.label`
+  display: flex;
+  margin: 15px 0px 10px 5px;
+  font-size: medium;
+  font-weight: bold;
+`;
+
+const InputStyles = styled.input`
+  padding: 8px;
+  font-size: medium;
+  font-family: 'Montserrat', sans-serif;
+  border: 2px solid rgb(155, 155, 155);
+  border-radius: 5px;
+  width: 250px;
+  &.error {
+    border: 1px solid red;
+  }
+`;
 
 function Input(props) {
   //Apply error class to inputs if errors are present
@@ -35,27 +54,27 @@ function Input(props) {
   //Create placeholder for inputs based on value passed in
   const createPlaceholder = (param) => {
     if (param === 'confirmPassword') {
-      return 'Re-enter your password';
+      return 'Re-enter password';
     } else if (param === 'username') {
-      return 'Enter your preferred username';
+      return 'Enter username';
     } else {
-      return `Enter your ${param}`;
+      return `Enter ${param}`;
     }
   };
 
   const createInputComponent = (param, type) => {
     return (
       <div>
-        <label className="label">{createLabel(param)}</label>
-        <form className="box-flex">
-          <input
+        <LabelStyles>{createLabel(param)}</LabelStyles>
+        <form>
+          <InputStyles
             className={applyErrorClass(param)}
             type={type}
             name={param}
             id={param}
             placeholder={createPlaceholder(param)}
             onChange={handleChange}
-          />
+          ></InputStyles>
         </form>
       </div>
     );

@@ -11,12 +11,18 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Messages from './components/Messages';
-import './styles/App.css';
-import './styles/Alert.css';
 import { UserContext } from './context/userContext';
 import { MessageProvider } from './context/messageContext';
+import { createGlobalStyle } from 'styled-components';
+import './styles/Font.css';
 
 axios.defaults.withCredentials = true;
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: 'Montserrat', sans-serif;
+  }
+`;
 
 function App() {
   const [state] = useContext(UserContext);
@@ -33,8 +39,9 @@ function App() {
   };
 
   return (
-    <Router>
-      <div className="App">
+    <div>
+      <GlobalStyle />
+      <Router>
         <NavMenu />
 
         {/* If new status message flash notification box with message */}
@@ -69,8 +76,8 @@ function App() {
 
         {/* Redirect to Dashboard if user is logged in */}
         {state.authenticated && <Redirect to="/dashboard" />}
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 

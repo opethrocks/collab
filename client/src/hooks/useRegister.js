@@ -26,11 +26,6 @@ const useRegister = () => {
         confirmPassword: undefined,
         username: undefined,
       });
-      //Reset error messages in order to show error notification
-      //for 5 seconds
-      setTimeout(() => {
-        setState({ ...state, status: undefined });
-      }, 5000);
     } catch (err) {
       //If any errors we set as status message notification
       if (err.response.status === 400) {
@@ -49,11 +44,6 @@ const useRegister = () => {
           username: undefined,
         });
       }
-      //Reset error messages in order to show error notification
-      //for 5 seconds
-      setTimeout(() => {
-        setState({ ...state, status: undefined });
-      }, 5000);
     }
   }
   return { handleRegister };

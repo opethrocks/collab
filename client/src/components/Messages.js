@@ -1,12 +1,97 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import useMessage from '../hooks/useMessage';
-import '../styles/Messages.css';
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { MessageContext } from '../context/messageContext';
 import { createWebSocketConnection, close } from '../websocket';
+import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
+
+const MessageStyles = styled.div`
+  .chat-container {
+    position: relative;
+  }
+
+  .chat-box {
+    padding: 10px;
+  }
+
+  .incoming-message {
+    height: auto;
+    max-width: 250px;
+    border: 0.5px solid rgb(194, 194, 194);
+    padding: 0px 10px 0px 10px;
+    background-color: rgb(220, 239, 253);
+    border-radius: 10px;
+    box-shadow: 0 0 10px #75e4b9;
+  }
+
+  .incoming-flex {
+    display: flex;
+    flex-direction: column wrap;
+    align-items: flex-start;
+  }
+
+  .outgoing-message {
+    height: auto;
+    max-width: 250px;
+    border: 0.5px solid rgb(194, 194, 194);
+    padding: 0px 10px 0px 10px;
+    background-color: rgb(135, 243, 202);
+    border-radius: 10px;
+    box-shadow: 0 0 10px #b8d8f0;
+  }
+
+  .message {
+    word-wrap: break-word;
+  }
+
+  .outgoing-flex {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-end;
+  }
+
+  .input-area {
+    display: flex;
+    position: fixed;
+    align-items: center;
+    bottom: 0;
+    @media screen and (min-width: 600px) {
+      left: calc(25vw / 2);
+    }
+  }
+`;
+
+const TextArea = styled.textarea`
+  padding: 10px;
+  margin: 5px;
+  font-size: large;
+  font-family: 'Montserrat', sans-serif;
+  border: 2px solid rgb(196, 196, 196);
+  border-radius: 5px;
+  outline: none;
+  resize: none;
+  width: 70vw;
+
+  &:focus {
+    border: 2px solid #75e4b9;
+  }
+`;
+
+const Button = styled.button`
+  background-color: #75e4b9;
+  border-radius: 50%;
+  cursor: pointer;
+  float: right;
+  padding: 10px;
+  outline: none;
+  @media screen and (min-width: 600px) {
+    padding: 15px;
+  }
+`;
 
 library.add(fas, far, fab);
 
@@ -17,8 +102,6 @@ function Messages() {
   const { sendMessage, checkAuth } = useMessage();
 
   const chat = useRef(null);
-
-  const menuItems = ['Conversations', 'Group Messages', 'Favorites'];
 
   useEffect(() => {
     chat.current.scrollTop =
@@ -39,24 +122,31 @@ function Messages() {
   };
 
   const handleMessages = () => {
-    return msgState.messages.map((msg, index) => {
+    return msgState.messages.map((msg) => {
       if (msg.incoming) {
         return (
-          <div className="incoming-flex" key={index}>
-            {msgState.user && (
-              <p>
-                Message from {msgState.user} @ {msg.timestamp}
-              </p>
-            )}
-            <div className="incoming-message">{msg.text}</div>
+          <div>
+            <div className="incoming-flex" key={uuidv4()}>
+              {msgState.user && (
+                <p>
+                  Message from {msgState.user} @ {msg.timestamp}
+                </p>
+              )}
+            </div>
+            <div className="incoming-flex" key={uuidv4()}>
+              <div className="incoming-message">
+                <p className="message">{msg.text}</p>
+              </div>
+            </div>
           </div>
         );
       }
       return (
-        <div className="outgoing-flex" key={index}>
+        <div className="outgoing-flex" key={uuidv4()}>
           <p>{msg.timestamp}</p>
-
-          <div className="outgoing-message">{msg.text}</div>
+          <div className="outgoing-message" key={uuidv4()}>
+            <p className="message">{msg.text}</p>
+          </div>
         </div>
       );
     });
@@ -67,17 +157,18 @@ function Messages() {
   };
 
   return (
-    <div>
-      <div className="chat-container" ref={chat}>
-        <div className="chat-box">{handleMessages()}</div>
-      </div>
-      <div className="input-container">
-        <textarea value={msgState.text} onChange={handleChange} />
-        <button className="send-button" onClick={handleSend}>
+    <MessageStyles className="chat-container">
+      <MessageStyles className="chat-box" ref={chat}>
+        {handleMessages()}
+      </MessageStyles>
+
+      <MessageStyles className="input-area">
+        <TextArea value={msgState.text} onChange={handleChange}></TextArea>
+        <Button className="send-button" onClick={handleSend}>
           <i className="fas fa-paper-plane fa-2x"></i>
-        </button>
-      </div>
-    </div>
+        </Button>
+      </MessageStyles>
+    </MessageStyles>
   );
 }
 
