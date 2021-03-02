@@ -21,6 +21,8 @@ axios.defaults.withCredentials = true;
 const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Montserrat', sans-serif;
+    position: relative;
+    margin: 50px 0px 70px 0px;
   }
 `;
 

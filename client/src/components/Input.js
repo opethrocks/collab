@@ -6,6 +6,10 @@ const LabelStyles = styled.label`
   margin: 15px 0px 10px 5px;
   font-size: medium;
   font-weight: bold;
+  @media screen and (min-width: 600px) {
+    font-size: large;
+    margin-top: 25px;
+  }
 `;
 
 const InputStyles = styled.input`
@@ -17,6 +21,9 @@ const InputStyles = styled.input`
   width: 250px;
   &.error {
     border: 1px solid red;
+  }
+  @media screen and (min-width: 600px) {
+    font-size: large;
   }
 `;
 

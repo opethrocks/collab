@@ -13,8 +13,9 @@ const TopNav = styled.nav`
     height: 50px;
   }
   height: 40px;
-  position: sticky;
-  top: 0;
+  width: 99%;
+  position: fixed;
+  top: 2px;
 `;
 
 const StyledLink = styled(Link)`

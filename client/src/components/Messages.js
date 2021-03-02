@@ -16,6 +16,11 @@ const MessageStyles = styled.div`
 
   .chat-box {
     padding: 10px;
+    margin: 0px 15px 0px 15px;
+
+    @media screen and (min-width: 600px) {
+      margin: 0px 150px 0px 150px;
+    }
   }
 
   .incoming-message {
@@ -32,6 +37,10 @@ const MessageStyles = styled.div`
     display: flex;
     flex-direction: column wrap;
     align-items: flex-start;
+    font-size: medium;
+    @media screen and (min-width: 600px) {
+      font-size: large;
+    }
   }
 
   .outgoing-message {
@@ -52,12 +61,16 @@ const MessageStyles = styled.div`
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-end;
+    @media screen and (min-width: 600px) {
+      font-size: large;
+    }
   }
 
   .input-area {
     display: flex;
     position: fixed;
     align-items: center;
+    justify-content: center;
     bottom: 0;
     @media screen and (min-width: 600px) {
       left: calc(25vw / 2);
@@ -125,15 +138,16 @@ function Messages() {
     return msgState.messages.map((msg) => {
       if (msg.incoming) {
         return (
-          <div>
-            <div className="incoming-flex" key={uuidv4()}>
+          <div key={uuidv4()}>
+            <div className="incoming-flex">
               {msgState.user && (
-                <p>
-                  Message from {msgState.user} @ {msg.timestamp}
-                </p>
+                <div>
+                  <p>From {msgState.user}</p>
+                  <p>{msg.timestamp}</p>
+                </div>
               )}
             </div>
-            <div className="incoming-flex" key={uuidv4()}>
+            <div className="incoming-flex">
               <div className="incoming-message">
                 <p className="message">{msg.text}</p>
               </div>
@@ -144,7 +158,7 @@ function Messages() {
       return (
         <div className="outgoing-flex" key={uuidv4()}>
           <p>{msg.timestamp}</p>
-          <div className="outgoing-message" key={uuidv4()}>
+          <div className="outgoing-message">
             <p className="message">{msg.text}</p>
           </div>
         </div>

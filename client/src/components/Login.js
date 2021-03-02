@@ -17,6 +17,9 @@ const LoginStyle = styled.div`
     display: flex;
     align-items: center;
     flex-flow: column nowrap;
+    @media screen and (min-width: 600px) {
+      padding: 50px;
+    }
   }
 
   &.page {
@@ -34,11 +37,17 @@ const LoginButton = styled.button`
   margin: 30px 0px 10px 0px;
   border-radius: 5px;
   cursor: pointer;
+  @media screen and (min-width: 600px) {
+    font-size: large;
+  }
 `;
 
 const Icon = styled.img`
   width: 96px;
   height: auto;
+  @media screen and (min-width: 600px) {
+    width: 120px;
+  }
 `;
 
 const Error = styled.p`

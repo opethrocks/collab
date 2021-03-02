@@ -9,11 +9,11 @@ function Dashboard(props) {
   //validate the auth token, if not authenticated then log user out.
   useEffect(() => {
     axios.post('/api/dashboard').catch((err) => {
-      setState((state) => ({
+      setState({
         ...state,
         authenticated: false,
         status: err.response.data.msg,
-      }));
+      });
     });
   });
 
