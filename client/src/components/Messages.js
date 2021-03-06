@@ -41,6 +41,7 @@ const MessageStyles = styled.div`
     @media screen and (min-width: 600px) {
       font-size: large;
     }
+    margin-bottom: 20px;
   }
 
   .outgoing-message {

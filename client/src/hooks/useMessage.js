@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { MessageContext } from '../context/messageContext';
 import { UserContext } from '../context/userContext';
 import { registerOnMessageCallback, send } from '../websocket';
+
 import axios from 'axios';
 
 const UseMessage = () => {
@@ -52,7 +53,7 @@ const UseMessage = () => {
       setState({
         ...state,
         authenticated: false,
-        status: err.response.data.msg,
+        status: err.response?.data.msg,
       });
     }
   }

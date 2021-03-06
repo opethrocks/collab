@@ -29,7 +29,7 @@ const useRegister = () => {
     } catch (err) {
       //If any errors we set as status message notification
       if (err.response.status === 400) {
-        setState({ ...state, errors: err.response.data.errors });
+        setState({ ...state, errors: err.response?.data.errors });
       }
       //If user already register we redirect to login
       //and reset user credentials in state
@@ -37,7 +37,7 @@ const useRegister = () => {
         setState({
           ...state,
           registered: true,
-          status: err.response.data.msg,
+          status: err.response?.data.msg,
           email: undefined,
           password: undefined,
           confirmPassword: undefined,

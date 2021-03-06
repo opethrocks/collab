@@ -83,10 +83,10 @@ function Register() {
 
   //Display error messages in red under input boxes
   const displayErrorMessage = (name) => {
-    if (state.errors && state.errors.find((err) => err.param === name)) {
+    if (state.errors?.find((err) => err.param === name)) {
       return (
         <Error className="error-msg">
-          {state.errors.filter((err) => err.param === name)[0].msg}
+          {state.errors?.filter((err) => err.param === name)[0].msg}
         </Error>
       );
     }

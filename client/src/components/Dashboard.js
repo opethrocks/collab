@@ -12,7 +12,7 @@ function Dashboard(props) {
       setState({
         ...state,
         authenticated: false,
-        status: err.response.data.msg,
+        status: err.response?.data.msg,
       });
     });
   });

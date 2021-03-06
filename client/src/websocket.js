@@ -17,8 +17,8 @@ function createWebSocketConnection() {
   ws.onmessage = (e) => {
     onMessageCallback && onMessageCallback(e.data);
   };
-  ws.onerror = (error) => {
-    console.log(`Websocket error ${error.reason}`);
+  ws.onerror = (event) => {
+    console.log(`Websocket error ${event}`);
   };
 
   ws.onclose = (e) => {

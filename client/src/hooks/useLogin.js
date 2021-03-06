@@ -25,7 +25,7 @@ const useLogin = () => {
       });
     } catch (err) {
       //If any errors, set appropriate state for error display on login component
-      setState({ ...state, errors: err.response.data.errors });
+      setState({ ...state, errors: err.response?.data.errors });
     }
   }
   //In order to log out, we make a request to api/logout to delete

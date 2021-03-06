@@ -65,19 +65,21 @@ function Login() {
 
   //Keep input in sync with state in UserContext
   const handleChange = (e) => {
-    if (e.target.name === 'email') {
-      setState((state) => ({ ...state, email: e.target.value }));
+    if (e.target.value === '')
+      setState({ ...state, email: undefined, password: undefined });
+    else if (e.target.name === 'email') {
+      setState({ ...state, email: e.target.value });
     } else if (e.target.name === 'password') {
-      setState((state) => ({ ...state, password: e.target.value }));
+      setState({ ...state, password: e.target.value });
     }
   };
 
   //Display error messages in red under input boxes
-  const displayErrorMessage = (name) => {
-    if (state.errors && state.errors.find((err) => err.param === name)) {
+  const displayErrorMessage = (type) => {
+    if (state.errors?.find((err) => err.param === type)) {
       return (
         <Error className="error-msg">
-          {state.errors.filter((err) => err.param === name)[0].msg}
+          {state.errors?.filter((err) => err.param === type)[0].msg}
         </Error>
       );
     }
