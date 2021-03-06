@@ -1,9 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-//Bring in input validator middleware
-const inputValidator = require('../../middlewares/credentialValidation');
 
 const router = express.Router();
+
+//Bring in input validator middleware
+const inputValidator = require('../../middlewares/credentialValidation');
+//Input validation schema
+const schema = require('../../models/Login');
 
 //Mongoose User Schema
 const User = require('../../models/User');
@@ -12,15 +15,12 @@ const User = require('../../models/User');
 const Token = require('../../models/Token');
 const token = new Token();
 
-//Input validation
-const schema = require('../../models/Login');
-
 router.post('/', inputValidator(schema), async (req, res) => {
   const { email, password } = req.body;
 
   //Search database for registered user
   try {
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email });
     if (!user) {
       res
         .status(400)
@@ -31,7 +31,7 @@ router.post('/', inputValidator(schema), async (req, res) => {
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(400).json({
-        errors: [{ msg: 'Password is incorrect', param: 'password' }]
+        errors: [{ msg: 'Password is incorrect', param: 'password' }],
       });
     } else {
       const authToken = token.generateToken(user);
@@ -39,7 +39,7 @@ router.post('/', inputValidator(schema), async (req, res) => {
       res.cookie('token', authToken, {
         secure: process.env == 'Production' ? true : false,
         httpOnly: true,
-        sameSite: 'strict'
+        sameSite: 'strict',
       });
 
       res.status(200).send({ username: user.username });

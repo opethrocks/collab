@@ -1,10 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 
+const router = express.Router();
+
 //Bring in input validator middleware
 const credentialValidation = require('../../middlewares/credentialValidation');
-
-const router = express.Router();
 
 //User model
 const User = require('../../models/User');
@@ -21,26 +21,25 @@ router.post('/', credentialValidation(schema), async (req, res) => {
     if (user) {
       res.status(403).json({ msg: 'User already registered' });
       return;
-    } else {
-      const newUser = new User({
-        username,
-        email,
-        password
-      });
-      bcrypt.genSalt(10, (err, salt) => {
-        if (err) throw err;
-        bcrypt.hash(password, salt, (err, hash) => {
-          if (err) throw err;
-          //Set password to hash
-          newUser.password = hash;
-          //Save new user
-          newUser
-            .save()
-            .then(() => res.status(200).json({ msg: 'You can now login' }))
-            .catch((err) => res.status(400).json({ msg: err }));
-        });
-      });
     }
+    const newUser = new User({
+      username,
+      email,
+      password,
+    });
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) throw err;
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) throw err;
+        //Set password to hash
+        newUser.password = hash;
+        //Save new user
+        newUser
+          .save()
+          .then(() => res.status(200).json({ msg: 'You can now login' }))
+          .catch((err) => res.status(400).json({ msg: err }));
+      });
+    });
   } catch (err) {
     console.log(err);
   }

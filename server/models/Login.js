@@ -5,11 +5,11 @@ const inputSchema = Joi.object({
     .required()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] }
+      tlds: { allow: ['com', 'net'] },
     })
     .messages({
       'any.required': 'Email is required',
-      'string.email': 'Please enter a valid email'
+      'string.email': 'Please enter a valid email',
     }),
   password: Joi.string()
     .required()
@@ -17,8 +17,8 @@ const inputSchema = Joi.object({
     .messages({
       'string.pattern.base':
         'Password must be at least 8 characters with only numbers',
-      'any.required': 'Password is required'
-    })
+      'any.required': 'Password is required',
+    }),
 });
 
 module.exports = inputSchema;

@@ -15,7 +15,7 @@ const userValidator = (schema) => {
         let msg = err.message.replace(/\"/g, '');
         return {
           msg,
-          param
+          param,
         };
       });
       //Send error response
