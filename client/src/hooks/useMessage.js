@@ -34,14 +34,39 @@ const UseMessage = () => {
     handleSend();
   }
 
+  function formatDate(date) {
+    const calcDaysPassed = (date1, date2) =>
+      Math.round(Math.abs((date2 - date1) / (1000 * 60 * 60 * 24)));
+
+    const daysPassed = calcDaysPassed(new Date(), date);
+
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const year = date.getFullYear();
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
+    const amOrPm = `${hour < 12 ? 'AM' : 'PM'}`;
+
+    if (daysPassed === 0) return `Today at ${hour}:${minutes} ${amOrPm}`;
+    if (daysPassed === 1) return `Yesterday at ${hour}:${minutes} ${amOrPm}`;
+    if (daysPassed >= 7) return `${daysPassed} days ago`;
+    else {
+      return `${month}/${day}/${year} @ ${
+        hour > 12 ? hour - 12 : hour
+      }:${minutes} ${hour < 12 ? 'AM' : 'PM'}`;
+    }
+  }
+
   function handleSend() {
+    const date = new Date();
+
     setMsgState({
       ...msgState,
       text: '',
       messages: msgState.messages.concat({
         text: msgState.text,
         incoming: false,
-        timestamp: new Date().toLocaleString(),
+        timestamp: formatDate(date),
       }),
     });
   }
