@@ -40,20 +40,22 @@ const UseMessage = () => {
 
     const daysPassed = calcDaysPassed(new Date(), date);
 
-    const month = `${date.getMonth() + 1}`.padStart(2, 0);
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const year = date.getFullYear();
+    // const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    // const day = `${date.getDate()}`.padStart(2, 0);
+    // const year = date.getFullYear();
+
     const hour = date.getHours();
-    const minutes = date.getMinutes();
+    const minutes = `${date.getMinutes()}`.padEnd(2, 0);
     const amOrPm = `${hour < 12 ? 'AM' : 'PM'}`;
 
     if (daysPassed === 0) return `Today at ${hour}:${minutes} ${amOrPm}`;
     if (daysPassed === 1) return `Yesterday at ${hour}:${minutes} ${amOrPm}`;
     if (daysPassed >= 7) return `${daysPassed} days ago`;
     else {
-      return `${month}/${day}/${year} @ ${
-        hour > 12 ? hour - 12 : hour
-      }:${minutes} ${hour < 12 ? 'AM' : 'PM'}`;
+      return new Intl.DateTimeFormat(navigator.locale).format();
+      // return `${month}/${day}/${year} @ ${
+      //   hour > 12 ? hour - 12 : hour
+      // }:${minutes} ${hour < 12 ? 'AM' : 'PM'}`;
     }
   }
 
