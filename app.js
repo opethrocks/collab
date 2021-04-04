@@ -1,42 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const WebSocket = require('ws');
-
+const chatSocket = require('./server/sockets/chatSocket');
+const mongooseInit = require('./server/mongoose/Mongoose');
 require('dotenv').config();
 
 const app = express();
 
-//Body Parser
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-//Cookie Parser
-app.use(cookieParser());
-
-//Cors
-const corsOptions = { origin: 'http://localhost:3000', credentials: true };
-app.use(cors(corsOptions));
-
-//DB config
-const uri =
-  process.env.NODE_ENV === 'production'
-    ? process.env.MONGODB_URI
-    : require('./server/config/keys').MongoURI;
-
-//Connect to mongo
-mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log('MongoDB connected...'))
-  .catch((err) => console.log(err));
-
-//Configure routes
-app.use('/api', require('./server/routes'));
+//Port
+const port = process.env.PORT || 5000;
 
 // //determine environment
 if (process.env.NODE_ENV === 'production') {
@@ -46,57 +19,31 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-//Port
-const port = process.env.PORT || 5000;
+//Body Parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-const wss = new WebSocket.Server({ noServer: true });
+//Cookie Parser
+app.use(cookieParser());
 
-const heartbeat = (ws) => {
-  ws.isAlive = true;
+//Connect to mongoose db
+mongooseInit();
+
+//Cors
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+  methods: ['GET', 'POST'],
 };
 
-const ping = (ws) => {
-  ws.ping();
-};
+app.use(cors(corsOptions));
 
-wss.on('connection', function connection(ws) {
-  ws.isAlive = true;
-  ws.on('pong', () => {
-    heartbeat(ws);
-  });
+//Configure routes
+app.use('/api', require('./server/routes'));
 
-  const interval = setInterval(() => {
-    wss.clients.forEach((ws) => {
-      if (ws.isAlive === false) {
-        return ws.terminate();
-      }
-      ws.isAlive = false;
-      ws.ping(() => {
-        ping(ws);
-      });
-    });
-  }, 30000);
+const httpServer = require('http')
+  .createServer(app)
+  .listen(port, () => console.log(`Server running on port ${port}`));
 
-  ws.on('message', function incoming(data) {
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(data);
-      }
-    });
-  });
-
-  ws.on('close', function close() {
-    ws.terminate();
-    clearInterval(interval);
-  });
-});
-
-const server = app.listen(port, () =>
-  console.log(`Server running on port ${port}`)
-);
-
-server.on('upgrade', (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, (socket) => {
-    wss.emit('connection', socket, request);
-  });
-});
+//Start SocketIO chat server
+chatSocket(httpServer, corsOptions);

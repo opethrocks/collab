@@ -8,7 +8,7 @@ const key =
     : require('../config/keys').jwtKey;
 
 //Mongoose user model
-const User = require('../models/User');
+const User = require('../mongoose/models/User');
 
 //If access token is valid, send it back in response.
 
