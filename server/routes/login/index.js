@@ -8,10 +8,9 @@ const schema = require('../../inputValidation/Login');
 const router = express.Router();
 
 router.post('/', inputValidator(schema), async (req, res) => {
-  const { email, password } = req.body;
-
   //Search database for registered user
   try {
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) throw { msg: 'User not found', param: 'email' };
 
