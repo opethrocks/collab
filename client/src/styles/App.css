@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 .App {
   text-align: center;
@@ -39,7 +39,7 @@
 
 /* Navbar style */
 
-nav {
+/* nav {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -66,6 +66,6 @@ li a {
 }
 
 /* Change the link color on hover */
-li a:hover {
+/* li a:hover {
   background-color: #75e4b9;
-}
+} */

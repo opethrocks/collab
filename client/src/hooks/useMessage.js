@@ -1,14 +1,10 @@
 import { useContext } from 'react';
 import { MessageContext } from '../context/messageContext';
 import { UserContext } from '../context/userContext';
-import { registerOnMessageCallback, send } from '../websocket';
-
+import socket from '../socket';
 import axios from 'axios';
 
 const UseMessage = () => {
-  //Callback called when message is recieved from websocket
-  registerOnMessageCallback(recieveMessage);
-
   const [msgState, setMsgState] = useContext(MessageContext);
   const [state, setState] = useContext(UserContext);
 
@@ -30,7 +26,7 @@ const UseMessage = () => {
       username: state.username,
       text: msgState.text,
     };
-    send(JSON.stringify(message));
+
     handleSend();
   }
 
@@ -39,10 +35,6 @@ const UseMessage = () => {
       Math.round(Math.abs((date2 - date1) / (1000 * 60 * 60 * 24)));
 
     const daysPassed = calcDaysPassed(new Date(), date);
-
-    // const month = `${date.getMonth() + 1}`.padStart(2, 0);
-    // const day = `${date.getDate()}`.padStart(2, 0);
-    // const year = date.getFullYear();
 
     const hour = date.getHours();
     const minutes = `${date.getMinutes()}`.padEnd(2, 0);
@@ -53,9 +45,6 @@ const UseMessage = () => {
     if (daysPassed >= 7) return `${daysPassed} days ago`;
     else {
       return new Intl.DateTimeFormat(navigator.locale).format();
-      // return `${month}/${day}/${year} @ ${
-      //   hour > 12 ? hour - 12 : hour
-      // }:${minutes} ${hour < 12 ? 'AM' : 'PM'}`;
     }
   }
 
@@ -85,7 +74,42 @@ const UseMessage = () => {
     }
   }
 
-  return { sendMessage, checkAuth };
+  function webSocket() {
+    //Get username from userContext and assign it to
+    //socket.auth and connect socket to server
+    const { username } = state;
+    socket.auth = { username };
+    socket.connect();
+
+    //Display error messages to console
+    //Will implement error messages in UI soon
+    socket.on('connect_error', (err) => {
+      if (err.message === 'invalid username') {
+        console.log(err.message);
+      }
+    });
+
+    //Build user object
+    socket.on('users', (users) => {
+      users.forEach((user) => {
+        user.self = user.userID === socket.id;
+      });
+      //put the current user first and then sort by username
+      const userList = users.sort((a, b) => {
+        if (a.self) return -1;
+        if (b.self) return 1;
+        if (a.username < b.username) return -1;
+        return a.username > b.username ? 1 : 0;
+      });
+      setState({ ...state, users: new Set(userList) });
+    });
+    //When user connects add username to state.users
+    socket.on('user connected', (user) => {
+      state.users.add(user);
+    });
+  }
+
+  return { sendMessage, checkAuth, webSocket };
 };
 
 export default UseMessage;
