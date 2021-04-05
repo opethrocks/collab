@@ -5,9 +5,11 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { MessageContext } from '../context/messageContext';
-import { createWebSocketConnection, close } from '../websocket';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { UserContext } from '../context/userContext';
+import socket from '../socket';
+import SideMenu from './SideMenu';
 
 const MessageStyles = styled.div`
   .chat-container {
@@ -113,7 +115,8 @@ dom.i2svg();
 
 function Messages() {
   const [msgState, setMsgState] = useContext(MessageContext);
-  const { sendMessage, checkAuth } = useMessage();
+  const [state, setState] = useContext(UserContext);
+  const { sendMessage, checkAuth, webSocket } = useMessage();
 
   const chat = useRef(null);
 
@@ -124,12 +127,16 @@ function Messages() {
 
   useEffect(() => {
     checkAuth();
-    createWebSocketConnection();
+    //Open websocket connection
+    const { username } = state;
+    socket.connect();
+    socket.auth = { username };
+    webSocket();
   }, []);
 
-  useEffect(() => {
-    return () => close();
-  }, []);
+  // useEffect(() => {
+  //   return () => close();
+  // }, []);
 
   const handleSend = () => {
     sendMessage();
@@ -172,18 +179,21 @@ function Messages() {
   };
 
   return (
-    <MessageStyles className="chat-container">
-      <MessageStyles className="chat-box" ref={chat}>
-        {handleMessages()}
-      </MessageStyles>
+    <div>
+      <SideMenu />
+      <MessageStyles className="chat-container">
+        <MessageStyles className="chat-box" ref={chat}>
+          {handleMessages()}
+        </MessageStyles>
 
-      <MessageStyles className="input-area">
-        <TextArea value={msgState.text} onChange={handleChange}></TextArea>
-        <Button className="send-button" onClick={handleSend}>
-          <i className="fas fa-paper-plane fa-2x"></i>
-        </Button>
+        <MessageStyles className="input-area">
+          <TextArea value={msgState.text} onChange={handleChange}></TextArea>
+          <Button className="send-button" onClick={handleSend}>
+            <i className="fas fa-paper-plane fa-2x"></i>
+          </Button>
+        </MessageStyles>
       </MessageStyles>
-    </MessageStyles>
+    </div>
   );
 }
 

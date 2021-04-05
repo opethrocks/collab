@@ -7,7 +7,7 @@ import React, { createContext, useState } from 'react';
 const UserContext = createContext([{}, () => {}]);
 
 const UserProvider = (props) => {
-  const [state, setState] = useState({});
+  const [state, setState] = useState({ users: new Set() });
 
   return (
     <UserContext.Provider value={[state, setState]}>

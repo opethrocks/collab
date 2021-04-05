@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import useLogin from '../hooks/useLogin';
 
 const LabelStyles = styled.label`
   display: flex;
@@ -28,6 +29,7 @@ const InputStyles = styled.input`
 `;
 
 function Input(props) {
+  const { handleLogin } = useLogin();
   //Apply error class to inputs if errors are present
   const applyErrorClass = (name) => {
     if (
@@ -68,7 +70,8 @@ function Input(props) {
     return (
       <div>
         <LabelStyles>{createLabel(param)}</LabelStyles>
-        <form>
+
+        <form onSubmit={handleLogin}>
           <InputStyles
             className={applyErrorClass(param)}
             type={type}

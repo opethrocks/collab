@@ -7,7 +7,8 @@ const useLogin = () => {
 
   //Use credentials entered by user to make api call to api/login
   //to authenticate user and retrieve a login token.
-  async function handleLogin() {
+  async function handleLogin(e) {
+    e.preventDefault();
     try {
       const res = await axios.post('/api/login', {
         email: state.email,
