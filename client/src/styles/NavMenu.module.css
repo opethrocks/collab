@@ -1,0 +1,37 @@
+.NavMenu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgb(235, 245, 252);
+  border-radius: 10px;
+  box-shadow: 0 0 10px#75e4b9;
+}
+.NavMenu img {
+  height: 40vmin;
+  pointer-events: none;
+  max-height: 50px;
+  max-width: 50px;
+  float: left;
+}
+
+.rightItem {
+  float: right;
+}
+
+.leftItem {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color on hover */
+li a:hover {
+  background-color: #75e4b9;
+}

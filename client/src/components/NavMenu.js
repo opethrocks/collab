@@ -3,55 +3,7 @@ import { Link } from 'react-router-dom';
 import img from '../assets/icon.png';
 import useLogin from '../hooks/useLogin';
 import { UserContext } from '../context/userContext';
-import styled from 'styled-components';
-
-const TopNav = styled.nav`
-  list-style-type: none;
-  background-color: rgb(235, 245, 252);
-  border-radius: 10px;
-  @media screen and (min-width: 600px) {
-    height: 50px;
-  }
-  height: 40px;
-  width: 99%;
-  position: fixed;
-  top: 2px;
-`;
-
-const StyledLink = styled(Link)`
-  display: block;
-  color: black;
-  font-size: small;
-  @media screen and (min-width: 600px) {
-    font-size: medium;
-    padding: 15px 15px;
-  }
-  text-align: center;
-  padding: 10px 10px;
-  text-decoration: none;
-  &:hover {
-    background-color: #75e4b9;
-    border-radius: 10px;
-  }
-`;
-
-const LeftItem = styled.li`
-  float: left;
-`;
-
-const RightItem = styled.li`
-  float: right;
-`;
-
-const Icon = styled.img`
-  max-height: 40px;
-  max-width: 40px;
-  @media screen and {
-    max-height: 50px;
-    max-width: 50px;
-  }
-  float: left;
-`;
+import styles from '../styles/NavMenu.module.css';
 
 function NavMenu() {
   const [state] = useContext(UserContext);
@@ -60,37 +12,31 @@ function NavMenu() {
   const { handleLogout } = useLogin();
 
   return (
-    <TopNav>
-      <Icon className="icon" src={img} alt=""></Icon>
+    <nav className={styles.NavMenu}>
+      <img className="icon" src={img} alt=""></img>
 
-      <LeftItem>
-        {state.authenticated && (
-          <StyledLink to="/dashboard">Dashboard</StyledLink>
-        )}
-      </LeftItem>
-      <LeftItem>
-        {state.authenticated && (
-          <StyledLink to="/messages">Messages</StyledLink>
-        )}
-      </LeftItem>
+      <li className={styles.leftItem}>
+        {state.authenticated && <Link to="/dashboard">Dashboard</Link>}
+      </li>
+      <li className={styles.leftItem}>
+        {state.authenticated && <Link to="/messages">Messages</Link>}
+      </li>
 
       {/* Tab to Login/Logout depending on whether we have successfull login*/}
-      <RightItem>
+      <li className={styles.rightItem}>
         {state.authenticated ? (
-          <StyledLink to="/login" onClick={handleLogout}>
+          <Link to="/login" onClick={handleLogout}>
             Logout
-          </StyledLink>
+          </Link>
         ) : (
-          <StyledLink to="/login">Login</StyledLink>
+          <Link to="/login">Login</Link>
         )}
-      </RightItem>
+      </li>
       {/* Tab for register component */}
-      <RightItem>
-        {!state.authenticated && (
-          <StyledLink to="/register">Register</StyledLink>
-        )}
-      </RightItem>
-    </TopNav>
+      <li className={styles.rightItem}>
+        {!state.authenticated && <Link to="/register">Register</Link>}
+      </li>
+    </nav>
   );
 }
 

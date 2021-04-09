@@ -13,18 +13,9 @@ import Dashboard from './components/Dashboard';
 import Messages from './components/Messages';
 import { UserContext } from './context/userContext';
 import { MessageProvider } from './context/messageContext';
-import { createGlobalStyle } from 'styled-components';
-import './styles/Font.css';
+import styles from './styles/App.module.css';
 
 axios.defaults.withCredentials = true;
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    font-family: 'Montserrat', sans-serif;
-    position: relative;
-    margin: 50px 0px 70px 0px;
-  }
-`;
 
 function App() {
   const [state] = useContext(UserContext);
@@ -41,8 +32,7 @@ function App() {
   };
 
   return (
-    <div>
-      <GlobalStyle />
+    <div className={styles.App}>
       <Router>
         <NavMenu />
 
