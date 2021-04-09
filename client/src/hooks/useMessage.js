@@ -85,7 +85,7 @@ const UseMessage = () => {
     //Will implement error messages in UI soon
     socket.on('connect_error', (err) => {
       if (err.message === 'invalid username') {
-        console.log(err.message);
+        console.log(err.message, username);
       }
     });
 

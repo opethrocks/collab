@@ -1,0 +1,37 @@
+.Input {
+  font-family: 'Montserrat', sans-serif;
+}
+
+input {
+  font-size: small;
+  padding: 8px;
+  border: 2px solid rgb(155, 155, 155);
+  border-radius: 5px;
+  width: 90%;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.Input label {
+  font-size: small;
+  display: flex;
+  margin: 15px 0px 10px 5px;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 600px) {
+  .Input input {
+    font-size: large;
+  }
+  .Input label {
+    font-size: large;
+  }
+}
+
+/* @media screen and (min-width: 600px) {
+  label {
+    font-size: medium;
+  }
+} */
