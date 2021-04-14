@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
-import { UserContext } from '../context/userContext';
+import { UserContext } from '../../context/userContext';
 
 function Dashboard(props) {
   const [state, setState] = useContext(UserContext);

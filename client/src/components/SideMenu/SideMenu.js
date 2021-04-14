@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { UserContext } from '../context/userContext';
+import { UserContext } from '../../context/userContext';
 import { v4 as uuidv4 } from 'uuid';
-import styles from '../styles/Sidebar.module.css';
+import styles from './Sidebar.module.css';
 
 function SideMenu() {
   const [state] = useContext(UserContext);

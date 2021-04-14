@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import img from '../assets/icon.png';
-import useLogin from '../hooks/useLogin';
-import { UserContext } from '../context/userContext';
-import styles from '../styles/NavMenu.module.css';
+import img from '../../assets/icon.png';
+import useLogin from '../../hooks/useLogin';
+import { UserContext } from '../../context/userContext';
+import styles from './NavMenu.module.css';
 
 function NavMenu() {
   const [state] = useContext(UserContext);
