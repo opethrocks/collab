@@ -1,6 +1,6 @@
 import React from 'react';
-import useLogin from '../hooks/useLogin';
-import styles from '../styles/Input.module.css';
+import useLogin from '../../hooks/useLogin';
+import styles from './Input.module.css';
 
 function Input(props) {
   const { handleLogin } = useLogin();

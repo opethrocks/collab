@@ -6,11 +6,11 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import NavMenu from './components/NavMenu';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import Messages from './components/Messages';
+import NavMenu from './components/NavMenu/NavMenu';
+import Login from './components/Dialogue/Login';
+import Register from './components/Dialogue/Register';
+import Dashboard from './components/Dashboard/Dashboard';
+import Messages from './components/Chat/Chat';
 import { UserContext } from './context/userContext';
 import { MessageProvider } from './context/messageContext';
 import styles from './styles/App.module.css';

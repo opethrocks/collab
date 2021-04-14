@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Input from './Input';
-import img from '../assets/icon.png';
-import useLogin from '../hooks/useLogin';
-import { UserContext } from '../context/userContext';
-import styles from '../styles/Dialogue.module.css';
+import Input from '../Input/Input';
+import img from '../../assets/icon.png';
+import useLogin from '../../hooks/useLogin';
+import { UserContext } from '../../context/userContext';
+import styles from './Dialogue.module.css';
 
 function Login() {
   const [state, setState] = useContext(UserContext);
