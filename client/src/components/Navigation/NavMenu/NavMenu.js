@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import img from '../../assets/icon.png';
-import useLogin from '../../hooks/useLogin';
-import { UserContext } from '../../context/userContext';
+import img from '../../../assets/icon.png';
+import useLogin from '../../../hooks/useLogin';
+import { UserContext } from '../../../context/userContext';
 import styles from './NavMenu.module.css';
 
-function NavMenu() {
+const NavMenu = (props) => {
   const [state] = useContext(UserContext);
 
   //Logout function from useLogin hook
@@ -38,6 +38,6 @@ function NavMenu() {
       </li>
     </nav>
   );
-}
+};
 
 export default NavMenu;

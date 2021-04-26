@@ -6,7 +6,8 @@ import axios from 'axios';
 const useRegister = () => {
   const [state, setState] = useContext(UserContext);
 
-  async function handleRegister() {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     try {
       const res = await axios.post('/api/register', {
         email: state.email,
@@ -29,7 +30,9 @@ const useRegister = () => {
     } catch (err) {
       //If any errors we set as status message notification
       if (err.response.status === 400) {
-        setState({ ...state, errors: err.response.data.errors });
+        setState((prevState) => {
+          return { ...prevState, errors: err.response.data.errors };
+        });
       }
       //If user already register we redirect to login
       //and reset user credentials in state
@@ -45,8 +48,32 @@ const useRegister = () => {
         });
       }
     }
-  }
-  return { handleRegister };
+  };
+  //Keep input in sync with UserContext state
+  const registerInputChangeHanlder = (e) => {
+    switch (e.target.name) {
+      case 'email':
+        setState((state) => ({ ...state, email: e.target.value }));
+        break;
+      case 'username':
+        setState((state) => ({ ...state, username: e.target.value }));
+        break;
+      case 'password':
+        setState((state) => ({ ...state, password: e.target.value }));
+        break;
+      case 'confirmPassword':
+        setState((state) => ({ ...state, confirmPassword: e.target.value }));
+        break;
+      default:
+        break;
+    }
+  };
+
+  const switchToLoginHandler = () => {
+    setState({});
+  };
+
+  return { handleRegister, registerInputChangeHanlder, switchToLoginHandler };
 };
 
 export default useRegister;
