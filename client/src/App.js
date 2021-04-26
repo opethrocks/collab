@@ -6,29 +6,28 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import NavMenu from './components/NavMenu/NavMenu';
-import Login from './components/Dialogue/Login';
-import Register from './components/Dialogue/Register';
+import NavMenu from './components/Navigation/NavMenu/NavMenu';
+import Login from './components/Forms/LoginForm';
+import Register from './components/Forms/RegisterForm';
 import Dashboard from './components/Dashboard/Dashboard';
-import Messages from './components/Chat/Chat';
+import Messages from './containers/Messages/Messages';
 import { UserContext } from './context/userContext';
 import { MessageProvider } from './context/messageContext';
 import styles from './styles/App.module.css';
 
 axios.defaults.withCredentials = true;
 
-function App() {
-  const [state] = useContext(UserContext);
+const App = () => {
+  const [state, setState] = useContext(UserContext);
 
   //Display notification box when status changes
   const displayNotification = () => {
-    if (state.status) {
-      return (
-        <div className="success-alert">
-          <strong>{state.status}</strong>
-        </div>
-      );
-    }
+    setTimeout(() => {
+      setState((prevState) => {
+        return { ...prevState, status: null };
+      });
+    }, 5000);
+    return <p className={styles.successAlert}>{state.status}</p>;
   };
 
   return (
@@ -37,7 +36,9 @@ function App() {
         <NavMenu />
 
         {/* If new status message flash notification box with message */}
-        <div className="alert-box">{displayNotification()}</div>
+        <div className={styles.alertContainer}>
+          {state.status && displayNotification()}
+        </div>
 
         <Switch>
           <Route path="/" exact />
@@ -71,6 +72,6 @@ function App() {
       </Router>
     </div>
   );
-}
+};
 
 export default App;

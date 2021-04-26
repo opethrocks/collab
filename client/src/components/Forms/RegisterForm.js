@@ -4,47 +4,31 @@ import Input from '../Input/Input';
 import img from '../../assets/icon.png';
 import useRegister from '../../hooks/useRegister';
 import { UserContext } from '../../context/userContext';
-import styles from './Dialogue.module.css';
+import styles from './Form.module.css';
 
-function Register() {
+const RegisterForm = () => {
   const [state, setState] = useContext(UserContext);
 
   //Register function to make api call to server
-  const { handleRegister } = useRegister();
-
-  //Keep input in sync with UserContext state
-  const handleChange = (e) => {
-    switch (e.target.name) {
-      case 'email':
-        setState((state) => ({ ...state, email: e.target.value }));
-        break;
-      case 'username':
-        setState((state) => ({ ...state, username: e.target.value }));
-        break;
-      case 'password':
-        setState((state) => ({ ...state, password: e.target.value }));
-        break;
-      case 'confirmPassword':
-        setState((state) => ({ ...state, confirmPassword: e.target.value }));
-        break;
-      default:
-        break;
-    }
-  };
+  const {
+    handleRegister,
+    registerInputChangeHanlder,
+    switchToLoginHandler,
+  } = useRegister();
 
   //Display error messages in red under input boxes
   const displayErrorMessage = (name) => {
     if (state.errors?.find((err) => err.param === name)) {
       return (
-        <div className={styles.errorMsg}>
+        <p className={styles.errorMsg}>
           {state.errors?.filter((err) => err.param === name)[0].msg}
-        </div>
+        </p>
       );
     }
   };
 
   return (
-    <div className={styles.Dialogue}>
+    <div className={styles.Form}>
       <div className={styles.box}>
         <img src={img} alt=""></img>
 
@@ -52,7 +36,8 @@ function Register() {
           param="email"
           type="text"
           serverErrors={state.errors}
-          handleChange={handleChange}
+          handleChange={registerInputChangeHanlder}
+          submit={handleRegister}
         />
 
         {/* If errors are present display error message in red */}
@@ -62,7 +47,8 @@ function Register() {
           param="username"
           type="text"
           serverErrors={state.errors}
-          handleChange={handleChange}
+          handleChange={registerInputChangeHanlder}
+          submit={handleRegister}
         />
 
         {/* If errors are present display error message in red */}
@@ -72,7 +58,8 @@ function Register() {
           param="password"
           type="password"
           serverErrors={state.errors}
-          handleChange={handleChange}
+          handleChange={registerInputChangeHanlder}
+          submit={handleRegister}
         />
 
         {/* If errors are present display error message in red */}
@@ -82,7 +69,8 @@ function Register() {
           param="confirmPassword"
           type="password"
           serverErrors={state.errors}
-          handleChange={handleChange}
+          handleChange={registerInputChangeHanlder}
+          submit={handleRegister}
         />
 
         {/* If errors are present display error message in red */}
@@ -95,13 +83,13 @@ function Register() {
         {/* Link to login if user already registered */}
         <p>
           Already registered?{' '}
-          <Link to="/login" onClick={() => setState((state) => ({}))}>
+          <Link to="/login" onClick={switchToLoginHandler}>
             Login
           </Link>
         </p>
       </div>
     </div>
   );
-}
+};
 
-export default Register;
+export default RegisterForm;

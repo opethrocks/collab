@@ -1,18 +1,19 @@
-.Dialogue {
+.Form {
   display: flex;
   justify-content: center;
 }
 
 .box {
   border: 0.5px solid rgb(194, 194, 194);
-  padding: 30px;
+  padding: 10px 20px 10px 0px;
   margin: 30px;
   background-color: rgb(235, 245, 252);
   border-radius: 10px;
   box-shadow: 0 0 10px#75e4b9;
+  box-sizing: border-box;
 }
 
-.Dialogue input:focus {
+.Form input:focus {
   outline: none !important;
   border: 2px solid #75e4b9;
   box-shadow: 0 0 10px #75e4b9;
@@ -29,43 +30,44 @@
   color: red;
 }
 
-.Dialogue button {
+.Form button {
   padding: 8px;
-  width: 100px;
+  width: 80px;
   font-size: small;
   background-color: #75e4b9;
   font-weight: lighter;
   color: #000000;
-  margin: 25px;
+  margin: 15px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.Dialogue img {
-  width: 72px;
+.Form img {
+  width: 64px;
   height: auto;
 }
 
-.Dialogue p {
+.Form p {
   font-size: small;
 }
 
 @media screen and (min-width: 600px) {
   .box {
     padding: 50px;
+    width: 350px;
   }
 
-  .Dialogue img {
+  .Form img {
     width: 120px;
   }
 
-  .Dialogue button {
+  .Form button {
     font-size: medium;
     width: 150px;
     font-weight: bold;
   }
 
-  .Dialogue p {
+  .Form p {
     font-size: medium;
   }
 }

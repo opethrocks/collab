@@ -4,3 +4,18 @@
   text-align: center;
   font-family: 'Montserrat', sans-serif;
 }
+
+.alertContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.successAlert {
+  border: 1px solid green;
+  background-color: greenyellow;
+  color: black;
+  font-weight: bold;
+  font-size: medium;
+  border-radius: 5px;
+  padding: 10px;
+}

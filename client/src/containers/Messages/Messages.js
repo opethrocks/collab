@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, Component } from 'react';
 import useMessage from '../../hooks/useMessage';
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -8,14 +8,14 @@ import { MessageContext } from '../../context/messageContext';
 import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from '../../context/userContext';
 import socket from '../../socket';
-import SideMenu from '../SideMenu/SideMenu';
-import styles from './Chat.module.css';
+import SideMenu from '../../components/Navigation/SideMenu/SideMenu';
+import styles from './Messages.module.css';
 
 library.add(fas, far, fab);
 
 dom.i2svg();
 
-function Chat() {
+const Messages = () => {
   const [msgState, setMsgState] = useContext(MessageContext);
   const [state, setState] = useContext(UserContext);
   const { sendMessage, checkAuth, webSocket } = useMessage();
@@ -36,16 +36,12 @@ function Chat() {
     webSocket();
   }, []);
 
-  const handleSend = () => {
-    sendMessage();
-  };
-
-  const handleMessages = function () {
-    return msgState.messages.map((msg) => {
-      msgState.incoming ? (
+  const handleMessages = () => {
+    return this.state.messages.map((msg) => {
+      this.state.incoming ? (
         <div>
           <div className={styles.incoming}>
-            <p>From {msgState.user}</p>
+            <p>From {this.state.user}</p>
             <p>{msg.timestamp}</p>
             <div className={styles.incoming}>
               <p className={styles.message}>{msg.text}</p>
@@ -90,27 +86,27 @@ function Chat() {
   };
 
   const handleChange = (e) => {
-    setMsgState((msgState) => ({ ...msgState, text: e.target.value }));
+    this.setState({ text: e.target.value });
   };
 
   return (
     <div>
       <SideMenu />
       <div className={styles.Messages}>
-        <div className={styles.chat} ref={chat}>
+        <div className={styles.chat}>
           {/* {handleMessages()} */}
           <div key={uuidv4()}>{handleMessages}</div>
         </div>
 
         <form>
           <textarea value={msgState.text} onChange={handleChange}></textarea>
-          <button onClick={handleSend}>
+          <button onClick={sendMessage}>
             <img className="fas fa-paper-plane fa-2x" />
           </button>
         </form>
       </div>
     </div>
   );
-}
+};
 
-export default Chat;
+export default Messages;
