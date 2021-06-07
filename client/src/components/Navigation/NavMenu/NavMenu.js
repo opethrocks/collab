@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import img from '../../../assets/icon.png';
 import useLogin from '../../../hooks/useLogin';
 import { UserContext } from '../../../context/userContext';
+import Logo from '../../Logo/Logo';
 import styles from './NavMenu.module.css';
 
 const NavMenu = (props) => {
@@ -13,7 +13,7 @@ const NavMenu = (props) => {
 
   return (
     <nav className={styles.NavMenu}>
-      <img className="icon" src={img} alt=""></img>
+      <Logo height="5px" clicked={props.toggleDrawer} />
 
       <li className={styles.leftItem}>
         {state.authenticated && <Link to="/dashboard">Dashboard</Link>}

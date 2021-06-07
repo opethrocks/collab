@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../Input/Input';
-import img from '../../assets/icon.png';
 import useLogin from '../../hooks/useLogin';
 import { UserContext } from '../../context/userContext';
 import styles from './Form.module.css';
+import Logo from '../Logo/Logo';
 
-const LoginForm = (props) => {
-  const [loginState, setLoginState] = useContext(UserContext);
+const LoginForm = () => {
+  const [loginState] = useContext(UserContext);
 
   const {
     handleLogin,
@@ -15,10 +15,21 @@ const LoginForm = (props) => {
     switchToRegisterHandler,
   } = useLogin();
 
+  //Display error messages in red under input boxes
+  const displayErrorMessage = (name) => {
+    if (loginState.errors?.find((err) => err.param === name)) {
+      return (
+        <p className={styles.errorMsg}>
+          {loginState.errors?.filter((err) => err.param === name)[0].msg}
+        </p>
+      );
+    }
+  };
+
   return (
     <div className={styles.Form}>
       <div className={styles.box}>
-        <img src={img} alt=""></img>
+        <Logo height="120px" />
         <Input
           param="email"
           type="text"
@@ -28,7 +39,7 @@ const LoginForm = (props) => {
         />
 
         {/* If errors are present for this element, display red text denoting error message */}
-        {/* {displayErrorMessage('email')} */}
+        {displayErrorMessage('email')}
 
         <Input
           param="password"
@@ -39,7 +50,7 @@ const LoginForm = (props) => {
         />
 
         {/* If errors are present for this element, display red text denoting error message */}
-        {/* {displayErrorMessage('password')} */}
+        {displayErrorMessage('password')}
 
         <button onClick={handleLogin}>Login</button>
 

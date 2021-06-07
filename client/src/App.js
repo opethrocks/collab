@@ -6,14 +6,15 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import NavMenu from './components/Navigation/NavMenu/NavMenu';
 import Login from './components/Forms/LoginForm';
 import Register from './components/Forms/RegisterForm';
 import Dashboard from './components/Dashboard/Dashboard';
-import Messages from './containers/Messages/Messages';
+import Messages from './components/Messages/Messages';
 import { UserContext } from './context/userContext';
 import { MessageProvider } from './context/messageContext';
 import styles from './styles/App.module.css';
+import Aux from './hoc/Aux';
+import Layout from './hoc/Layout';
 
 axios.defaults.withCredentials = true;
 
@@ -33,7 +34,7 @@ const App = () => {
   return (
     <div className={styles.App}>
       <Router>
-        <NavMenu />
+        <Layout />
 
         {/* If new status message flash notification box with message */}
         <div className={styles.alertContainer}>

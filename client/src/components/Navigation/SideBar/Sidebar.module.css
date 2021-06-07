@@ -1,5 +1,38 @@
+.SideDrawer {
+  position: fixed;
+  width: 280px;
+  max-width: 70%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  background-color: white;
+  padding: 32px 16px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease-out;
+}
+
+@media (min-width: 500px) {
+  .SideDrawer {
+    display: none;
+  }
+}
+
+.Open {
+  transform: translateX(0);
+}
+
+.Close {
+  transform: translateX(-100%);
+}
+
+.Logo {
+  height: 11%;
+  margin-bottom: 32px;
+}
+
 /* The side navigation menu */
-.sidebar {
+/* .sidebar {
   margin: 0;
   padding: 0;
   width: 200px;
@@ -9,37 +42,37 @@
   overflow: auto;
   border-radius: 10px;
   box-shadow: 0 0 10px#75e4b9;
-}
+} */
 
 /* Sidebar links */
-.sidebar a {
+/* .sidebar a {
   display: block;
   color: black;
   padding: 16px;
   text-decoration: none;
-}
+} */
 
 /* Active/current link */
-.sidebar a.active {
+/* .sidebar a.active {
   background-color: #75e4b9;
   color: white;
-}
+} */
 
 /* Links on mouse-over */
-.sidebar a:hover:not(.active) {
+/* .sidebar a:hover:not(.active) {
   background-color: rgb(170, 170, 170);
   color: white;
-}
+} */
 
 /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
-div.content {
+/* div.content {
   margin-left: 200px;
   padding: 1px 16px;
   height: 1000px;
-}
+} */
 
 /* On screens that are less than 700px wide, make the sidebar into a topbar */
-@media screen and (max-width: 700px) {
+/* @media screen and (max-width: 700px) {
   .sidebar {
     width: 100%;
     height: auto;
@@ -51,12 +84,12 @@ div.content {
   div.content {
     margin-left: 0;
   }
-}
+} */
 
 /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
-@media screen and (max-width: 400px) {
+/* @media screen and (max-width: 400px) {
   .sidebar a {
     text-align: center;
     float: none;
   }
-}
+} */

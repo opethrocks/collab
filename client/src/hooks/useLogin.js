@@ -20,13 +20,12 @@ const useLogin = () => {
         authenticated: true,
         username: res.data.username,
         errors: [{ msg: '', param: '' }],
-        email: undefined,
-        password: undefined,
-        status: undefined,
       });
     } catch (err) {
       //If any errors, set appropriate state for error display on login component
-      setAuthState({ errors: err.response?.data.errors });
+      setAuthState((prevState) => {
+        return { ...prevState, errors: err.response?.data.errors };
+      });
     }
   };
 
