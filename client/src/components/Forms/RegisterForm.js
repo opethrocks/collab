@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../Input/Input';
-import img from '../../assets/icon.png';
 import useRegister from '../../hooks/useRegister';
 import { UserContext } from '../../context/userContext';
 import styles from './Form.module.css';
+import Logo from '../Logo/Logo';
 
 const RegisterForm = () => {
-  const [state, setState] = useContext(UserContext);
+  const [state] = useContext(UserContext);
 
   //Register function to make api call to server
   const {
@@ -30,7 +30,7 @@ const RegisterForm = () => {
   return (
     <div className={styles.Form}>
       <div className={styles.box}>
-        <img src={img} alt=""></img>
+        <Logo height="120px" />
 
         <Input
           param="email"

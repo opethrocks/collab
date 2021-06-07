@@ -8,7 +8,7 @@ import { MessageContext } from '../../context/messageContext';
 import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from '../../context/userContext';
 import socket from '../../socket';
-import SideMenu from '../../components/Navigation/SideMenu/SideMenu';
+import SideBar from '../Navigation/SideBar/SideBar';
 import styles from './Messages.module.css';
 
 library.add(fas, far, fab);
@@ -17,31 +17,21 @@ dom.i2svg();
 
 const Messages = () => {
   const [msgState, setMsgState] = useContext(MessageContext);
-  const [state, setState] = useContext(UserContext);
-  const { sendMessage, checkAuth, webSocket } = useMessage();
 
-  const chat = useRef(null);
-
-  useEffect(() => {
-    chat.current.scrollTop =
-      chat.current.scrollHeight - chat.current.clientHeight;
-  });
+  const { sendMessage, checkAuth, websocketConnect } = useMessage();
 
   useEffect(() => {
     checkAuth();
     //Open websocket connection
-    const { username } = state;
-    socket.connect();
-    socket.auth = { username };
-    webSocket();
+    websocketConnect();
   }, []);
 
   const handleMessages = () => {
-    return this.state.messages.map((msg) => {
-      this.state.incoming ? (
+    return msgState.messages.map((msg) => {
+      msgState.incoming ? (
         <div>
           <div className={styles.incoming}>
-            <p>From {this.state.user}</p>
+            <p>From {msgState.user}</p>
             <p>{msg.timestamp}</p>
             <div className={styles.incoming}>
               <p className={styles.message}>{msg.text}</p>
@@ -86,12 +76,12 @@ const Messages = () => {
   };
 
   const handleChange = (e) => {
-    this.setState({ text: e.target.value });
+    setMsgState({ text: e.target.value });
   };
 
   return (
     <div>
-      <SideMenu />
+      <SideBar />
       <div className={styles.Messages}>
         <div className={styles.chat}>
           {/* {handleMessages()} */}

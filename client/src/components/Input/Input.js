@@ -3,8 +3,6 @@ import useLogin from '../../hooks/useLogin';
 import styles from './Input.module.css';
 
 const Input = (props) => {
-  const { handleLogin } = useLogin();
-
   //Apply error class to inputs if errors are present
   const applyErrorClass = (paramName) => {
     const param = props.serverErrors?.find((err) => err.param === paramName);
@@ -12,11 +10,6 @@ const Input = (props) => {
 
     return '';
   };
-
-  //Keep input in sync with state in UserContext
-  // const handleInput = (e) => {
-  //   props.handleChange();
-  // };
 
   //Format label for inputs based on value passed in
   const createLabel = (param) => {
@@ -29,13 +22,6 @@ const Input = (props) => {
     return 'Confirm password';
   };
 
-  //Display error messages in red under input boxes
-  const displayErrorMessage = (type) => {
-    if (props.serverErrors?.find((err) => err.param === type)) {
-      return props.serverErrors?.filter((err) => err.param === type)[0].msg;
-    }
-  };
-
   //Create placeholder for inputs based on value passed in
   const createPlaceholder = (param) => {
     if (param === 'confirmPassword') return 'Re-enter password';
@@ -44,10 +30,6 @@ const Input = (props) => {
   };
 
   const createInputComponent = (param, type) => {
-    let err = props.serverErrors?.find((err) => err.param === type)
-      ? props.serverErrors?.filter((err) => err.param === type)[0].msg
-      : `Enter ${param}`;
-
     return (
       <div className={styles.Input}>
         <label>{createLabel(param)}</label>
@@ -57,7 +39,7 @@ const Input = (props) => {
             type={type}
             name={param}
             id={param}
-            placeholder={err}
+            placeholder={createPlaceholder(param)}
             onChange={props.handleChange}
           />
         </form>

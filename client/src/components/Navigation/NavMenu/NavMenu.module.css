@@ -9,7 +9,7 @@
 }
 .NavMenu img {
   height: 40vmin;
-  pointer-events: none;
+  cursor: pointer;
   max-height: 50px;
   max-width: 50px;
   float: left;

@@ -74,7 +74,39 @@ const UseMessage = () => {
     }
   }
 
-  function webSocket() {
+  //Build user object
+  socket.on('users', (users) => {
+    users.forEach((user) => {
+      user.self = user.userID === socket.id;
+    });
+
+    //put the current user first and then sort by username
+    const userList = users.sort((a, b) => {
+      if (a.self) return -1;
+      if (b.self) return 1;
+      if (a.username < b.username) return -1;
+      return a.username > b.username ? 1 : 0;
+    });
+
+    setMsgState((prevState) => {
+      return {
+        ...prevState,
+        users: userList,
+      };
+    });
+  });
+
+  //When user connects add username to state.users
+  socket.on('user connected', (user) => {
+    setMsgState((prevState) => {
+      return {
+        ...prevState,
+        users: [...prevState.users, user],
+      };
+    });
+  });
+
+  const websocketConnect = () => {
     //Get username from userContext and assign it to
     //socket.auth and connect socket to server
     const { username } = state;
@@ -85,31 +117,16 @@ const UseMessage = () => {
     //Will implement error messages in UI soon
     socket.on('connect_error', (err) => {
       if (err.message === 'invalid username') {
-        console.log(err.message, username);
+        console.log(err.message);
       }
     });
 
-    //Build user object
-    socket.on('users', (users) => {
-      users.forEach((user) => {
-        user.self = user.userID === socket.id;
-      });
-      //put the current user first and then sort by username
-      const userList = users.sort((a, b) => {
-        if (a.self) return -1;
-        if (b.self) return 1;
-        if (a.username < b.username) return -1;
-        return a.username > b.username ? 1 : 0;
-      });
-      setState({ ...state, users: new Set(userList) });
-    });
-    //When user connects add username to state.users
-    socket.on('user connected', (user) => {
-      state.users.add(user);
-    });
-  }
+    const destroyed = () => {
+      socket.off('connect-error');
+    };
+  };
 
-  return { sendMessage, checkAuth, webSocket };
+  return { sendMessage, checkAuth, websocketConnect };
 };
 
 export default UseMessage;
